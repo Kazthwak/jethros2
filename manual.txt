@@ -1,0 +1,5 @@
+ERROR CODES:
+	FATAL ERROR CODES:
+		00: No error checking yet
+	NON-FATAL ERROR CODES:
+		00: No error checking yet

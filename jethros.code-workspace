@@ -6,7 +6,8 @@
 	],
 	"settings": {
 		"files.associations": {
-			"headers.h": "c"
+			"headers.h": "c",
+			"files.h": "c"
 		}
 	}
 }

@@ -1,0 +1,7 @@
+Which files are copy pasted
+kernel.c	- two checks for cross compiler are copy-pasted, rest is not
+boot.s		- mostly copy-pasted
+kernel.asm	- not copy-pasted
+linker.ld	- copy-pasted
+isodir		- copy-pasted
+the rest are not copy-pasted (barring the odd phrase and from myself)
