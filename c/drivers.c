@@ -35,10 +35,18 @@ void wordout(int port, unsigned short data){
 __asm__("out %% ax , %% dx" : : "a" (data), "d" ((unsigned short)port));
 }
 
+//for looking at ram instead of text output (mainly for graphics debugging)
+// #define ramwatch
+
 void putchar(char letter){
-char* video_mem_base = (char*)0xb8000;
-uint32_t video_offset = (cursorx+(80*cursory))*2;
+#ifndef ramwatch
+putcharxyc(cursorx, cursory, letter);
+#endif
+#ifdef ramwatch
+char* video_mem_base = (char*)0xa0000;
+uint32_t video_offset = (cursorx+(80*cursory));
 *(video_mem_base+video_offset) = letter;
+#endif
 cursorx++;
 if(cursorx >= 80){
 cursorx = 0;

@@ -1,6 +1,6 @@
 step 1: booting --YAY--/|\--DONE--
 Steps 2:
-	Graphics (not vga text mode)
+	Graphics (not vga text mode) ---YAY---/|\--DONE--
 	gdt setup
 	idt setup
 Steps 3:

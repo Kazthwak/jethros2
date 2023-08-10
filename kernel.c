@@ -16,15 +16,18 @@
 void kernel_main(){
 struct MultiBootInfoStruct* bootinfo = (struct MultiBootInfoStruct*)ebx_boot;
 stateinfo = *bootinfo;
-struct vbe_control_info* cinfo = stateinfo.vbe_control_info;
-vbe_info = *cinfo;
-print_string(cinfo);
-// print_string("testing");
-// newline();
-// setpixel(100, 10, 0x3);
-// uint32_t* videomem = 0xa0000;
-// *videomem = 0xffffffff;
-hexdword(stateinfo.vbe_control_info);
+struct vbe_mode_info* minfo = (struct vbe_mode_info*)stateinfo.vbe_mode_info;
+vbe_info = *minfo;
+struct vbe_control_info* cinfo = (struct vbe_control_info*)stateinfo.vbe_control_info;
+vbe_control_info = *cinfo;
+graphics_init();
+checks();
+graphics_init();
+info();
+newline();
+decint(65535);
+newline();
+hexword(65535/100);
 hang();
 Qshutdown();
 }

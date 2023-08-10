@@ -4,4 +4,5 @@ boot.s		- mostly copy-pasted
 kernel.asm	- not copy-pasted
 linker.ld	- copy-pasted
 isodir		- copy-pasted
+font.h		- font dowloaded from github. Author - Marcel Sondaar. Public domain
 the rest are not copy-pasted (barring the odd phrase and from myself)

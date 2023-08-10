@@ -29,13 +29,13 @@ forced to be within the first 8 KiB of the kernel file.
 .long 0
 /*;--------graphics--------
 ;mode_type*/
-.long 1
+.long 0
 /*;width*/
-.long 480
+.long 0
 /*;height*/
-.long 360
+.long 0
 /*;depth*/
-.long 32
+.long 0
 
 
 

@@ -1,6 +1,10 @@
 #include "headers.h"
 
 void checks(){
+//check for magic number
+if(eax_boot != 0x2BADB002){err_Nfat(00);}
+//check for flags
+if((stateinfo.flags&req_multiboot_flags) != req_multiboot_flags){err_Nfat(01);}
 return;
 }
 
@@ -12,20 +16,59 @@ hang();
 }
 
 void err_Nfat(uint8_t err_code){
-switch(err_code){
-case 0:
-//print err message
-break;
-}
+print_string("NON-FATAL ERROR. ERROR CODE: ");
+hexbyte(err_code);
+print_string(" SEE MANUAL!");
 //still in low tech mode (i.e no proper keyboard or screen drivers)
-//print wait message
+newline();
+print_string("PRESS ANY KEY TO CONTINUE");
+uint8_t key = bytein(0x60);
+while(key == bytein(0x60)){}
+key = bytein(0x60);
+while(key == bytein(0x60)){}
 //wait for keypress
 }
 
+void info(){
+print_string("Welcome to JETHROS.\n");
+print_string(version);
+print_string("\nBOOTLOADER: ");
+print_string((char*)stateinfo.boot_loader_name);
+//video info
+print_string("\nScreen resolution: 0x");
+hexword(x_res);
+print_string(" X 0x");
+hexword(y_res);
+print_string("\nCharacter resolution: 0x");
+hexword(x_char_res);
+print_string(" X 0x");
+hexword(y_char_res);
+//more info
+
+newline();
+}
+
+void decint(uint16_t number){
+for(int8_t i = 4; i >= 0; i--){
+	uint8_t tmp = number/pow(10,i);
+	putchar((tmp%10)+0x30);
+}
+}
+
 void binbyte(uint8_t val){
-for(uint8_t i = 0; i < 8; i++){
+for(int8_t i = 7; i >= 0; i--){
 	putchar(0x30+((val>>i)&0x1));
 }
+}
+
+void binword(uint16_t val){
+binbyte(val>>8);
+binbyte(val&0xff);
+}
+
+void bindword(uint32_t val){
+binword(val>>16);
+binword(val&0xffff);
 }
 
 void hexdig(uint8_t val){
@@ -61,9 +104,16 @@ string++;
 }
 }
 
+
 void newline(){
+#ifndef ramwatch
 cursorx = 0;
 cursory++;
+#endif
+#ifdef ramwatch
+putchar('\\');
+putchar('n');
+#endif
 }
 
 //set length bytes after base to val

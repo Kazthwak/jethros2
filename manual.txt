@@ -1,5 +1,8 @@
 ERROR CODES:
 	FATAL ERROR CODES:
 		00: No error checking yet
+		ff: testing error (should not occur)
 	NON-FATAL ERROR CODES:
-		00: No error checking yet
+		00: No magic number in eax
+		01: not enough flag bits are set in the multiboot structure
+		ff: testing error (should not occur)
