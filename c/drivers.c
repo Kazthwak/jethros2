@@ -38,6 +38,7 @@ __asm__("out %% ax , %% dx" : : "a" (data), "d" ((unsigned short)port));
 //for looking at ram instead of text output (mainly for graphics debugging)
 // #define ramwatch
 
+//prints one char to the cursor location, then increments the cursor
 void putchar(char letter){
 #ifndef ramwatch
 putcharxyc(cursorx, cursory, letter);

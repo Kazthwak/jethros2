@@ -1,6 +1,6 @@
 #ifndef kernel_header_included
 #define kernel_header_included
-#define version "beta 1.0"
+#define version "pre-beta 0.1"
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -12,7 +12,7 @@
 //vbe info flag bit
 //bootloader name flag bit set
 //memory map flag bit set
-#define req_multiboot_flags 0b101001000000
+#define req_multiboot_flags 0b101001000001
 
 struct MultiBootInfoStruct{
 	uint32_t flags;
@@ -57,6 +57,7 @@ struct vbe_control_info{
 	uint16_t vbe_ver;
 }__attribute__((packed));
 
+
 //from func 01
 struct vbe_mode_info{
 	uint16_t mode_attributes;
@@ -94,6 +95,14 @@ struct vbe_mode_info{
 	uint32_t off_screen_mem_size;
 }__attribute__((packed));
 
+struct regs
+{
+    uint32_t gs, fs, es, ds;      /* pushed the segs last */
+    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;  /* pushed by 'pusha' */
+    uint32_t int_no, err_code;    /* our 'push byte #' and ecodes do this */
+    uint32_t eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */ 
+};
+
 
 
 static struct vbe_control_info vbe_control_info;
@@ -105,8 +114,20 @@ static uint16_t x_res = 0;
 static uint16_t y_res = 0;
 static uint16_t x_char_res = 0;
 static uint16_t y_char_res = 0;
+static uint32_t lower_mem = 0;
+static uint32_t upper_mem = 0;
+//cmd flags
+//bit 0: ignore errors	-	switch -i
+//bit 1: safe keyboard mode	-	switch -s
+static uint8_t flags = 0;
 
 //function prototypes
+void set_idt_entry(uint8_t entry, uint32_t addr, uint16_t gdt_selector, uint8_t flags);
+void fault_handeler(struct regs* r);
+void install_idt(void);
+void set_idt_entry(uint8_t entry, uint32_t addr, uint16_t gdt_slector, uint8_t flags);
+void draw_rect(uint16_t x, uint16_t y, uint16_t x_size, uint16_t y_res, uint32_t colour);
+void cmdinterpret(void);
 uint32_t pow(uint16_t number, uint16_t exponent);
 void decint(uint16_t number);
 void putcharxyc(uint16_t x, uint16_t y, char character);
@@ -136,9 +157,47 @@ int bytein(int port);
 void Qshutdown(void);
 void kernel_main(void);
 
+extern void intt0(void);
+extern void idtr_load(void);
+extern void gdt_load(void);
+extern void gdtr_load(void);
+extern void _start(void);
 extern void kernel_init(void);
 extern void hang(void);
 extern uint32_t eax_boot;
 extern uint32_t ebx_boot;
+
+extern void isr0(void);
+extern void isr1(void);
+extern void isr2(void);
+extern void isr3(void);
+extern void isr4(void);
+extern void isr5(void);
+extern void isr6(void);
+extern void isr7(void);
+extern void isr8(void);
+extern void isr9(void);
+extern void isr10(void);
+extern void isr11(void);
+extern void isr12(void);
+extern void isr13(void);
+extern void isr14(void);
+extern void isr15(void);
+extern void isr16(void);
+extern void isr17(void);
+extern void isr18(void);
+extern void isr19(void);
+extern void isr20(void);
+extern void isr21(void);
+extern void isr22(void);
+extern void isr23(void);
+extern void isr24(void);
+extern void isr25(void);
+extern void isr26(void);
+extern void isr27(void);
+extern void isr28(void);
+extern void isr29(void);
+extern void isr30(void);
+extern void isr31(void);
 
 #endif

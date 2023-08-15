@@ -31,9 +31,9 @@ forced to be within the first 8 KiB of the kernel file.
 ;mode_type*/
 .long 0
 /*;width*/
-.long 0
+.long 1024
 /*;height*/
-.long 0
+.long 768
 /*;depth*/
 .long 0
 

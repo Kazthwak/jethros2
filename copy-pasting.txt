@@ -6,3 +6,4 @@ linker.ld	- copy-pasted
 isodir		- copy-pasted
 font.h		- font dowloaded from github. Author - Marcel Sondaar. Public domain
 the rest are not copy-pasted (barring the odd phrase and from myself)
+bran's kernel development tutorial and the OSdev wiki have provided enourmous help
