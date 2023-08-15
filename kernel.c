@@ -11,7 +11,6 @@
 #error "Cross compiler required: https://wiki.osdev.org/GCC_Cross-Compiler"
 #endif
 
-extern void isr0(void);
 void kernel_main(){
 gdt_init();
 struct MultiBootInfoStruct* bootinfo = (struct MultiBootInfoStruct*)ebx_boot;
@@ -27,6 +26,8 @@ newline();
 draw_rect(0, 0, 1024, 768, 0x00f0f0);
 // arbitraryfunc(isr0);
 install_idt();
+irq_init();
+intt0();
 hang();
 Qshutdown();
 }

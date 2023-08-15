@@ -41,7 +41,7 @@ idtr_load:
 
 global intt0
 intt0:
-	int 0
+	int 32
 	ret
 
 global gdt_load

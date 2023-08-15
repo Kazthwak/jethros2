@@ -4,3 +4,5 @@
 #include "./idt.c"
 #include "./graphics.c"
 #include "./maths.c"
+#include "./interupts.c"
+#include "./keyboard.c"

@@ -72,6 +72,24 @@ void install_idt(){
 	set_idt_entry(31, (uint32_t)isr31, 0x08, 0x8e);
 
 
+	set_idt_entry(32, (uint32_t)irq0, 0x08, 0x8e);
+	set_idt_entry(33, (uint32_t)irq1, 0x08, 0x8e);
+	set_idt_entry(34, (uint32_t)irq2, 0x08, 0x8e);
+	set_idt_entry(35, (uint32_t)irq3, 0x08, 0x8e);
+	set_idt_entry(36, (uint32_t)irq4, 0x08, 0x8e);
+	set_idt_entry(37, (uint32_t)irq5, 0x08, 0x8e);
+	set_idt_entry(38, (uint32_t)irq6, 0x08, 0x8e);
+	set_idt_entry(39, (uint32_t)irq7, 0x08, 0x8e);
+	set_idt_entry(40, (uint32_t)irq8, 0x08, 0x8e);
+	set_idt_entry(41, (uint32_t)irq9, 0x08, 0x8e);
+	set_idt_entry(42, (uint32_t)irq10, 0x08, 0x8e);
+	set_idt_entry(43, (uint32_t)irq11, 0x08, 0x8e);
+	set_idt_entry(44, (uint32_t)irq12, 0x08, 0x8e);
+	set_idt_entry(45, (uint32_t)irq13, 0x08, 0x8e);
+	set_idt_entry(46, (uint32_t)irq14, 0x08, 0x8e);
+	set_idt_entry(47, (uint32_t)irq15, 0x08, 0x8e);
+
+
 
 	idtr_load();
 
@@ -88,7 +106,5 @@ void install_idt(){
 
 }
 
-void fault_handeler(struct regs* r){
-hexdword(r->int_no);
-// hang();
-}
+
+//pic

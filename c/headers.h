@@ -122,6 +122,12 @@ static uint32_t upper_mem = 0;
 static uint8_t flags = 0;
 
 //function prototypes
+void irq_init(void);
+void pic_remap();
+void uninstall_irq(uint8_t irq_num);
+void install_irq_handle(uint8_t irq_num, void(*handler)(struct regs* r));
+void irq_handler(struct regs* r);
+void double_fault(void);
 void set_idt_entry(uint8_t entry, uint32_t addr, uint16_t gdt_selector, uint8_t flags);
 void fault_handeler(struct regs* r);
 void install_idt(void);
@@ -150,10 +156,10 @@ void print_string(char* string);
 void putchar(char letter);
 void arbitraryfunc(uint32_t funcaddr);
 void memset(uint32_t base, uint8_t val, uint32_t length);
-void byteout(int port, unsigned char data);
-int wordin(int port);
-void wordout(int port, unsigned short data);
-int bytein(int port);
+void byteout(uint32_t port, uint8_t data);
+int wordin(uint32_t port);
+void wordout(uint32_t port, uint16_t data);
+int bytein(uint32_t port);
 void Qshutdown(void);
 void kernel_main(void);
 
@@ -199,5 +205,23 @@ extern void isr28(void);
 extern void isr29(void);
 extern void isr30(void);
 extern void isr31(void);
+
+extern void irq0(void);
+extern void irq1(void);
+extern void irq2(void);
+extern void irq3(void);
+extern void irq4(void);
+extern void irq5(void);
+extern void irq6(void);
+extern void irq7(void);
+extern void irq8(void);
+extern void irq9(void);
+extern void irq10(void);
+extern void irq11(void);
+extern void irq12(void);
+extern void irq13(void);
+extern void irq14(void);
+extern void irq15(void);
+
 
 #endif
