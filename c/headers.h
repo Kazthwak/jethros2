@@ -1,6 +1,8 @@
 #ifndef kernel_header_included
 #define kernel_header_included
 #define version "pre-beta 0.1"
+#define timer_hz 20
+
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -108,6 +110,7 @@ struct regs
 static struct vbe_control_info vbe_control_info;
 static struct vbe_mode_info vbe_info;
 static struct MultiBootInfoStruct stateinfo;
+volatile uint64_t time = 0;
 static uint16_t cursorx = 0;
 static uint16_t cursory = 0;
 static uint16_t x_res = 0;
@@ -123,6 +126,11 @@ static uint8_t flags = 0;
 
 
 //function prototypes
+void wait_tick(uint32_t ticks);
+void wait_sec(uint16_t ticks);
+void hexqword(uint64_t val);
+void timer_phase(int hz);
+void timer_handle(struct regs* r);
 bool is_key_waiting(void);
 void gdt_init(void);
 void IRQ_set_mask(unsigned char IRQline);

@@ -7,3 +7,4 @@
 #include "./interupts.c"
 #include "./keyboard.c"
 #include "./disk.c"
+#include "./timer.c"

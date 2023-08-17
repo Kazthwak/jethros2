@@ -13,16 +13,19 @@
 
 void kernel_main(){
 init();
+wait_tick(200);
 newline();
 draw_rect(0, 0, 1024, 768, 0x00f0f0);
 // for(volatile uint32_t i = 0; i < 0xfffffff; i++);
 print_string("test");
 newline();
-// while(true){
+while(true){
 // 	if(is_key_waiting()){
 // 		putchar(get_key_buffer());
 // 	}
-// }
+	cursorx = 0;
+	hexqword(time);
+}
 hang();
 Qshutdown();
 }

@@ -45,7 +45,7 @@ idtr_load:
 
 global intt0
 intt0:
-	int 33
+	int 32
 	ret
 
 global gdt_load
@@ -62,6 +62,7 @@ gdt_load:
 
 extern keybuffer
 extern keybufferloc
+extern keypressed
 global keyboard_int
 keyboard_int:
 	pusha
@@ -76,9 +77,7 @@ keyboard_int:
 	cmp ah, 0
 	;but then not actuallu check
 	jmp .noteq
-	.end:
-	popa
-	ret
+	jmp .end
 	.noteq:
 	;check the 
 	mov ebx, [keybufferloc]
@@ -88,7 +87,39 @@ keyboard_int:
 	mov ebx, [keybufferloc]
 	mov [ebx], al
 	inc dword [keybufferloc]
-	jmp .end
+	.end:
+	;DOES NOT WORK SO SKIP
+	jmp .real_end
+
+	;al needs to be preserved
+	;check which sase to go to
+	cmp ah, 0
+	;now ah is 1 for press and 0 for unpress
+	xor ah, 1
+	;shift it to the correct bit placement
+	mov bl, al
+	;take cl remainder 8
+	and bl, 0b111
+	; shl ah, bl
+	;ebx is the pointer to the byte
+	mov ebx, keypressed
+	;divide the char code by 8
+	shr al, 3
+	;add on the aarray index offset
+	; add ebx, al
+	;ebx is the address
+	;ah is 0s with a 1 in the correct bit  
+	je .unpress
+	.press:
+	or byte [ebx], ah
+	jmp .real_end
+	.unpress:
+	xor ah, 0xff
+	and [ebx], ah
+	jmp .real_end
+	.real_end:
+	popa
+	ret
 
 
 

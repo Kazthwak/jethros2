@@ -175,6 +175,12 @@ hexword(val>>16);
 hexword(val&0xffff);
 }
 
+//64 bits in hex
+void hexqword(uint64_t val){
+hexdword(val>>32);
+hexdword(val&0xffffffff);
+}
+
 //prints a null terminated string (including newlines)
 void print_string(char* string){
 while(*string != 0){

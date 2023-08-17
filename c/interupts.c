@@ -6,6 +6,8 @@ void* irqs[256-32] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
 //from brans tutorial, but extended to handle all interupts
 
+
+
 void install_irq_handle(uint8_t irq_num, void(*handler)(struct regs* r)){
 	irqs[irq_num] = handler;
 }
@@ -58,7 +60,10 @@ void irq_init(){
 pic_remap();
 for(uint8_t i = 0; i <16; i++){IRQ_clear_mask(i);}
 IRQ_set_mask(1);
+IRQ_set_mask(0);
+timer_phase(timer_hz);
 install_irq_handle(1, keyboard_int);
+install_irq_handle(0, timer_handle);
 inton();
 }
 
