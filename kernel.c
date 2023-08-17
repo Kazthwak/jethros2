@@ -12,22 +12,17 @@
 #endif
 
 void kernel_main(){
-gdt_init();
-struct MultiBootInfoStruct* bootinfo = (struct MultiBootInfoStruct*)ebx_boot;
-stateinfo = *bootinfo;
-struct vbe_mode_info* minfo = (struct vbe_mode_info*)stateinfo.vbe_mode_info;
-vbe_info = *minfo;
-struct vbe_control_info* cinfo = (struct vbe_control_info*)stateinfo.vbe_control_info;
-vbe_control_info = *cinfo;
-checks();
-graphics_init();
-info();
+init();
 newline();
 draw_rect(0, 0, 1024, 768, 0x00f0f0);
-// arbitraryfunc(isr0);
-install_idt();
-irq_init();
-intt0();
+// for(volatile uint32_t i = 0; i < 0xfffffff; i++);
+print_string("test");
+newline();
+// while(true){
+// 	if(is_key_waiting()){
+// 		putchar(get_key_buffer());
+// 	}
+// }
 hang();
 Qshutdown();
 }

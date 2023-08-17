@@ -20,9 +20,13 @@ call kernel_main
 ;return back to the prievious assembly file
 ret
 
+global inton
+inton:
+	sti
+	ret
+
 extern Qshutdown
 hang:
-cli
 hlt
 jmp hang
 
@@ -41,7 +45,7 @@ idtr_load:
 
 global intt0
 intt0:
-	int 32
+	int 33
 	ret
 
 global gdt_load
@@ -55,6 +59,39 @@ gdt_load:
 	mov gs, ax
 	mov ss, ax
 	ret
+
+extern keybuffer
+extern keybufferloc
+global keyboard_int
+keyboard_int:
+	pusha
+	;take the keyboard input
+	mov dx, 0x60
+	in al, dx
+	;copy it to ah
+	mov ah, al
+	;shift it to the right 7 times
+	shr ah, 7
+	;check if it is 0
+	cmp ah, 0
+	;but then not actuallu check
+	jmp .noteq
+	.end:
+	popa
+	ret
+	.noteq:
+	;check the 
+	mov ebx, [keybufferloc]
+	sub ebx, keybuffer
+	cmp ebx, 0xff
+	jge .end
+	mov ebx, [keybufferloc]
+	mov [ebx], al
+	inc dword [keybufferloc]
+	jmp .end
+
+
+
 
 
 %include "./code/isr.asm"

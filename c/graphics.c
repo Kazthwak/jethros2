@@ -62,6 +62,9 @@ for(uint8_t i = 0; i < 8; i++){
 		if((font_basic[(uint16_t)character][i]>>j)&1){
 			putpixel(x+j, (y+i)<<1, 0xffffff);
 			putpixel(x+j, ((y+i)<<1)+1, 0xffffff);
+		}else{
+			putpixel(x+j, (y+i)<<1, 0x0);
+			putpixel(x+j, ((y+i)<<1)+1, 0x0);
 		}
 	}
 }

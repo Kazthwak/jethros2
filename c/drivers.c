@@ -49,7 +49,7 @@ uint32_t video_offset = (cursorx+(80*cursory));
 *(video_mem_base+video_offset) = letter;
 #endif
 cursorx++;
-if(cursorx >= 80){
+if(cursorx >= x_char_res){
 cursorx = 0;
 cursory++;
 }

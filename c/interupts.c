@@ -2,7 +2,9 @@
 
 //irq
 
-void* irqs[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+void* irqs[256-32] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+//from brans tutorial, but extended to handle all interupts
 
 void install_irq_handle(uint8_t irq_num, void(*handler)(struct regs* r)){
 	irqs[irq_num] = handler;
@@ -26,32 +28,38 @@ void pic_remap(){
 }
 
 void irq_handler(struct regs *r){
-    // This is a blank function pointer
-    void (*handler)(struct regs *r);
+	// This is a blank function pointer
+	void (*handler)(struct regs *r);
 
-    // Find out if we have a custom handler to run for this
-    //  IRQ, and then finally, run it
-    handler = irqs[r->int_no - 32];
-    if (handler)
-    {
-        handler(r);
-    }
+	// Find out if we have a custom handler to run for this
+	//  IRQ, and then finally, run it
+	handler = irqs[r->int_no - 32];
+	if (handler){
+		handler(r);
+	}
 
 	// If the IDT entry that was invoked was greater than 40
-    // (meaning IRQ8 - 15), then we need to send an EOI to
-    // the slave controller
-    if (r->int_no >= 40)
-    {
-        byteout(0xA0, 0x20);
-    }
+	// (meaning IRQ8 - 15), then we need to send an EOI to
+	// the slave controller
+	// but only if it is a pic interupt
+	if(r->int_no < 48){
+	
+	if (r->int_no >= 40){
+		byteout(0xA0, 0x20);
+	}
 
-    // In either case, we need to send an EOI to the master
-    // interrupt controller too
-    byteout(0x20, 0x20);
+	// In either case, we need to send an EOI to the master
+	// interrupt controller too
+	byteout(0x20, 0x20);
+	}
 }
 		
 void irq_init(){
 pic_remap();
+for(uint8_t i = 0; i <16; i++){IRQ_clear_mask(i);}
+IRQ_set_mask(1);
+install_irq_handle(1, keyboard_int);
+inton();
 }
 
 
@@ -65,4 +73,33 @@ __asm__("cli; hlt;");
 void fault_handler(struct regs* r){
 if(r->int_no == 8){double_fault();}
 hang();
+}
+
+void IRQ_set_mask(unsigned char IRQline){
+    uint16_t port;
+    uint8_t value;
+ 
+    if(IRQline < 8) {
+        port = 0x21;
+    } else {
+        port = 0xA1;
+        IRQline -= 8;
+    }
+    value = bytein(port) | (1 << IRQline);
+    byteout(port, value);        
+}
+ 
+ //osdev wiki
+void IRQ_clear_mask(unsigned char IRQline){
+    uint16_t port;
+    uint8_t value;
+ 
+    if(IRQline < 8) {
+        port = 0x21;
+    } else {
+        port = 0xA1;
+        IRQline -= 8;
+    }
+    value = bytein(port) & ~(1 << IRQline);
+    byteout(port, value);        
 }

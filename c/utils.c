@@ -1,5 +1,40 @@
 #include "headers.h"
 
+void init(){
+
+//init the gddt
+gdt_init();
+
+
+//copy the multiboot infostruct into a different one
+struct MultiBootInfoStruct* bootinfo = (struct MultiBootInfoStruct*)ebx_boot;
+stateinfo = *bootinfo;
+
+//copy the vbe mode infostruct into a different one
+struct vbe_mode_info* minfo = (struct vbe_mode_info*)stateinfo.vbe_mode_info;
+vbe_info = *minfo;
+
+//copy the vbe control infostruct into a different one
+struct vbe_control_info* cinfo = (struct vbe_control_info*)stateinfo.vbe_control_info;
+vbe_control_info = *cinfo;
+
+
+//initialize the graphics
+graphics_init();
+
+//install and initialize the idt
+install_idt();
+
+//install and initialize the irq handlers
+irq_init();
+
+//check some things about the machine
+checks();
+
+//display info about the machine and state
+info();
+}
+
 void cmdinterpret(){
 if(((stateinfo.flags>>2)&1) == 0){return;}
 char* strptr = (char*)stateinfo.cmdline;

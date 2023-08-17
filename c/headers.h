@@ -121,7 +121,18 @@ static uint32_t upper_mem = 0;
 //bit 1: safe keyboard mode	-	switch -s
 static uint8_t flags = 0;
 
+
 //function prototypes
+bool is_key_waiting(void);
+void gdt_init(void);
+void IRQ_set_mask(unsigned char IRQline);
+void IRQ_clear_mask(unsigned char IRQline);
+void init(void);
+char scancode(char scancodein);
+void clear_key_buffer(void);
+char get_key_buffer(void);
+bool ispressed(char key);
+void keyboard_int(struct regs* r);
 void irq_init(void);
 void pic_remap();
 void uninstall_irq(uint8_t irq_num);
@@ -163,6 +174,7 @@ int bytein(uint32_t port);
 void Qshutdown(void);
 void kernel_main(void);
 
+extern void inton(void);
 extern void intt0(void);
 extern void idtr_load(void);
 extern void gdt_load(void);

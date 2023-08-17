@@ -6,3 +6,4 @@
 #include "./maths.c"
 #include "./interupts.c"
 #include "./keyboard.c"
+#include "./disk.c"
