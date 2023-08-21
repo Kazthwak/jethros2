@@ -40,14 +40,13 @@ __asm__("out %% ax , %% dx" : : "a" (data), "d" ((unsigned short)port));
 
 //prints one char to the cursor location, then increments the cursor
 void putchar(char letter){
-#ifndef ramwatch
+if(text_out_type == 0){
+	if(letter == 0xa){newline(); return;}
 putcharxyc(cursorx, cursory, letter);
-#endif
-#ifdef ramwatch
-char* video_mem_base = (char*)0xa0000;
-uint32_t video_offset = (cursorx+(80*cursory));
-*(video_mem_base+video_offset) = letter;
-#endif
+}else if(text_out_type == 1){
+	byteout(0x3f8, letter);
+	return;
+}
 cursorx++;
 if(cursorx >= x_char_res){
 cursorx = 0;

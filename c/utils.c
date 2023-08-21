@@ -1,12 +1,22 @@
 #include "headers.h"
 
+void text_serial(){
+text_out_type = 1;
+}
+
+void text_screen(){
+text_out_type = 0;
+}
+
 void init(){
 
 //init the gddt
+string_serial("initialzing gdt\n");
 gdt_init();
 
 
 //copy the multiboot infostruct into a different one
+string_serial("copying structs\n");
 struct MultiBootInfoStruct* bootinfo = (struct MultiBootInfoStruct*)ebx_boot;
 stateinfo = *bootinfo;
 
@@ -20,15 +30,19 @@ vbe_control_info = *cinfo;
 
 
 //initialize the graphics
+string_serial("initing graphics\n");
 graphics_init();
 
 //install and initialize the idt
+string_serial("initing idt\n");
 install_idt();
 
 //install and initialize the irq handlers
+string_serial("initing irqs\n");
 irq_init();
 
 //check some things about the machine
+string_serial("checking machine\n");
 checks();
 
 //display info about the machine and state
@@ -69,6 +83,9 @@ void err_fat(uint8_t err_code){
 print_string("FATAL ERROR. ERROR CODE: ");
 hexbyte(err_code);
 print_string(" SEE MANUAL!");
+string_serial("FATAL ERROR: ");
+text_serial();
+hexbyte(err_code);
 hang();
 }
 
@@ -77,14 +94,15 @@ void err_Nfat(uint8_t err_code){
 print_string("NON-FATAL ERROR. ERROR CODE: ");
 hexbyte(err_code);
 print_string(" SEE MANUAL!");
-//still in low tech mode (i.e no proper keyboard or screen drivers)
+string_serial("NON-FATAL ERROR: ");
+text_serial();
+hexbyte(err_code);
+text_screen();
+
 newline();
 print_string("PRESS ANY KEY TO CONTINUE");
-uint8_t key = bytein(0x60);
-while(key == bytein(0x60)){}
-key = bytein(0x60);
-while(key == bytein(0x60)){}
 //wait for keypress
+while(!is_key_waiting());
 }
 
 //prints out some info about the computer and boot process
@@ -117,6 +135,17 @@ if(stateinfo.mem_lower == 640){
 		hexword(stateinfo.mem_upper);
 		print_string(" KB");
 	}
+text_serial();
+decint(x_res);
+putchar('\n');
+decint(y_res);
+putchar('\n');
+bindword(stateinfo.flags);
+putchar('\n');
+hexword(stateinfo.mem_lower);
+putchar('\n');
+hexword(stateinfo.mem_upper);
+text_screen();
 }
 //more info
 
@@ -181,15 +210,16 @@ hexdword(val>>32);
 hexdword(val&0xffffffff);
 }
 
+void string_serial(char* string){
+text_serial();
+print_string(string);
+text_screen();
+}
+
 //prints a null terminated string (including newlines)
 void print_string(char* string){
 while(*string != 0){
-if(*string == 10){
-newline();
-}
-else{
 putchar(*string);
-}
 string++;
 }
 }

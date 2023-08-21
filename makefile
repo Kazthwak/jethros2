@@ -9,7 +9,8 @@ clean:
 	@rm kernel_asm.o
 
 run: jethros.iso
-	@qemu-system-x86_64 -drive format=raw,file=jethros.iso
+	@rm serial.log
+	@qemu-system-x86_64 -drive format=raw,file=jethros.iso -serial file:serial.log -monitor stdio
 #comp command ~/opt/cross/bin/i686-elf-gcc -ffreestanding -nostdlib
 
 boot.o: ./code/boot.s

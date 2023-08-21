@@ -88,35 +88,17 @@ keyboard_int:
 	mov [ebx], al
 	inc dword [keybufferloc]
 	.end:
-	;DOES NOT WORK SO SKIP
-	jmp .real_end
+	; al is the char code
+	;ah is the top byte of the char
+	mov ebx, keypressed ;ebx has the address
+	and al, 0x7f ;ignore the top bit
+	mov edx, eax ;because one cannot create the sum of multiple values that differ in size
+	and edx, 0xff;get rid of everything except al
+	add ebx, edx ;add them together
+	xor ah, 1 ;reverse ah, so a release turns to a 0 and a press becomes a 1
+	;update the array index
+	mov [ebx], ah 
 
-	;al needs to be preserved
-	;check which sase to go to
-	cmp ah, 0
-	;now ah is 1 for press and 0 for unpress
-	xor ah, 1
-	;shift it to the correct bit placement
-	mov bl, al
-	;take cl remainder 8
-	and bl, 0b111
-	; shl ah, bl
-	;ebx is the pointer to the byte
-	mov ebx, keypressed
-	;divide the char code by 8
-	shr al, 3
-	;add on the aarray index offset
-	; add ebx, al
-	;ebx is the address
-	;ah is 0s with a 1 in the correct bit  
-	je .unpress
-	.press:
-	or byte [ebx], ah
-	jmp .real_end
-	.unpress:
-	xor ah, 0xff
-	and [ebx], ah
-	jmp .real_end
 	.real_end:
 	popa
 	ret

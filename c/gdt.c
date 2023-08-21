@@ -1,5 +1,7 @@
 #include "headers.h"
 
+
+
 //define the structs
 struct gdt_entry{
 //low half of limit

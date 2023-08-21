@@ -105,8 +105,9 @@ struct regs
     uint32_t eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */ 
 };
 
-
-
+//0 = screen
+//1 = serial port
+static uint8_t text_out_type = 0;
 static struct vbe_control_info vbe_control_info;
 static struct vbe_mode_info vbe_info;
 static struct MultiBootInfoStruct stateinfo;
@@ -122,10 +123,14 @@ static uint32_t upper_mem = 0;
 //cmd flags
 //bit 0: ignore errors	-	switch -i
 //bit 1: safe keyboard mode	-	switch -s
+//bit 2: ignore non-fatal errors - switch -n
 static uint8_t flags = 0;
 
 
 //function prototypes
+void string_serial(char* string);
+void text_screen(void);
+void text_serial(void);
 void wait_tick(uint32_t ticks);
 void wait_sec(uint16_t ticks);
 void hexqword(uint64_t val);

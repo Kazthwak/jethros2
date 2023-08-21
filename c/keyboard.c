@@ -1,6 +1,6 @@
 #include "headers.h"
 
-char keypressed[256/8];
+char keypressed[128];
 char keybuffer[256];
 uint32_t keybufferloc = (uint32_t)&keybuffer;
 
@@ -95,28 +95,12 @@ if(isshift){
 return(kbdmix[(uint8_t)scancodein]);
 }
 
-// //this is apparently the only way to make it work
-// void keyboard_int_body(uint16_t a){
-// if(((a>>7)&1) == 0){
-// 	hexword(a);
-// 	newline();
-// 	// uint8_t character = scancode(a);
-// 	// putchar(character);
-// }
-// }
-
-// void keyboard_int(struct regs* r){
-// uint16_t a = bytein(0x60);
-// keyboard_int_body(a);
-// }
- 
 bool is_key_waiting(){
 	return((uint32_t)keybufferloc != (uint32_t)&keybuffer);
 }
 
 bool ispressed(char key){
-key++;
-return(false);
+return(keypressed[(uint8_t)key]);
 }
 
 char get_key_buffer(){
