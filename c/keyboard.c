@@ -1,6 +1,5 @@
 #include "headers.h"
 
-char keypressed[128];
 char keybuffer[256];
 uint32_t keybufferloc = (uint32_t)&keybuffer;
 

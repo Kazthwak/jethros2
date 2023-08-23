@@ -10,11 +10,8 @@ global eax_boot
 global ebx_boot
 kernel_init:
 
-
-
 ;declare that the c kernel exists
 extern kernel_main
-; call hang
 ;call the c kernel
 call kernel_main
 ;return back to the prievious assembly file
@@ -22,7 +19,7 @@ ret
 
 global inton
 inton:
-	sti
+	cli
 	ret
 
 extern Qshutdown
@@ -45,8 +42,10 @@ idtr_load:
 
 global intt0
 intt0:
-	int 32
-	ret
+	; int 48
+	; ret
+	; jmp test_program
+	call Qshutdown
 
 global gdt_load
 gdt_load:
@@ -59,6 +58,7 @@ gdt_load:
 	mov gs, ax
 	mov ss, ax
 	ret
+
 
 extern keybuffer
 extern keybufferloc
@@ -103,9 +103,18 @@ keyboard_int:
 	popa
 	ret
 
+global flush_tss
+flush_tss:
+	mov ax, 0x28 | 0 ;gdt entry bit shifted then or'ed with the privelidge level
+	ltr ax
+	ret
 
-
-
+global test_program_end
+global test_program
+test_program:
+int 48
+jmp $
+test_program_end:
 
 %include "./code/isr.asm"
 

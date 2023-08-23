@@ -2,7 +2,7 @@
 
 //irq
 
-void* irqs[256-32] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+void* irqs[224];
 
 //from brans tutorial, but extended to handle all interupts
 
@@ -14,6 +14,15 @@ void install_irq_handle(uint8_t irq_num, void(*handler)(struct regs* r)){
 
 void uninstall_irq(uint8_t irq_num){
 	irqs[irq_num] = 0;
+}
+
+void test_func(struct regs* r){
+fired++;
+for(uint8_t i = 0; i < 16; i++){
+for(uint8_t j = 0; j < 16; j++){
+putpixel(i,j,0xff0000);
+}}
+r++;
 }
 
 void pic_remap(){
@@ -57,6 +66,8 @@ void irq_handler(struct regs *r){
 }
 		
 void irq_init(){
+memset((uint32_t)&keypressed, 0, sizeof(keypressed));
+memset((uint32_t)&irqs, 0, sizeof(irqs));
 pic_remap();
 for(uint8_t i = 0; i <16; i++){IRQ_clear_mask(i);}
 IRQ_set_mask(1);
@@ -64,6 +75,7 @@ IRQ_set_mask(0);
 timer_phase(timer_hz);
 install_irq_handle(1, keyboard_int);
 install_irq_handle(0, timer_handle);
+install_irq_handle(16, test_func);
 inton();
 }
 
@@ -76,6 +88,10 @@ __asm__("cli; hlt;");
 }
 
 void fault_handler(struct regs* r){
+for(uint8_t i = 0; i < 16; i++){
+for(uint8_t j = 0; j < 16; j++){
+putpixel(i+16,j,0x00ff00);
+}}
 if(r->int_no == 8){double_fault();}
 hang();
 }

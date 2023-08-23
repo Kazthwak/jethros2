@@ -10,6 +10,10 @@ static uint32_t screen_address;
 static uint16_t colour_depth;
 //error reporting for non-fatal errors
 
+void grtest(){
+	memcpy((void*)screen_address, scanlinewidth*(y_res>>1), (void*)screen_address+(scanlinewidth*(y_res>>1)));
+}
+
 //initialise several graphics variables (and a few others)
 void graphics_init(){
 if((stateinfo.flags>>11)&1){

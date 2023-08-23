@@ -140,12 +140,11 @@ irqn 12
 irqn 13
 irqn 14
 irqn 15
+irqn 16
 
 
 extern irq_handler
 
-; This is a stub that we have created for IRQ based ISRs. This calls
-; '_irq_handler' in our C code. We need to create this in an 'irq.c'
 irq_common_stub:
     pusha
     push ds

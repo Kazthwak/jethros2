@@ -105,13 +105,15 @@ struct regs
     uint32_t eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */ 
 };
 
+uint16_t fired = 0;
+char keypressed[128];
 //0 = screen
 //1 = serial port
 static uint8_t text_out_type = 0;
 static struct vbe_control_info vbe_control_info;
 static struct vbe_mode_info vbe_info;
 static struct MultiBootInfoStruct stateinfo;
-volatile uint64_t time = 0;
+static volatile uint64_t time = 0;
 static uint16_t cursorx = 0;
 static uint16_t cursory = 0;
 static uint16_t x_res = 0;
@@ -128,6 +130,9 @@ static uint8_t flags = 0;
 
 
 //function prototypes
+void grtest(void);
+void memcpy(void* start, uint32_t length, void* dest);
+void tss_init(void);
 void string_serial(char* string);
 void text_screen(void);
 void text_serial(void);
@@ -187,6 +192,9 @@ int bytein(uint32_t port);
 void Qshutdown(void);
 void kernel_main(void);
 
+extern void* test_program;
+extern void* test_program_end;
+extern void flush_tss(void);
 extern void inton(void);
 extern void intt0(void);
 extern void idtr_load(void);
@@ -247,6 +255,7 @@ extern void irq12(void);
 extern void irq13(void);
 extern void irq14(void);
 extern void irq15(void);
+extern void irq16(void);
 
 
 #endif
