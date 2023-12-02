@@ -9,7 +9,7 @@ clean:
 	@rm kernel_asm.o
 
 run: jethros.iso
-	@rm serial.log
+	@rm serial.log -f
 	@qemu-system-x86_64 -drive format=raw,file=jethros.iso -serial file:serial.log -monitor stdio -m 2G
 #comp command ~/opt/cross/bin/i686-elf-gcc -ffreestanding -nostdlib
 
@@ -31,4 +31,5 @@ jethros.bin: ./code/linker.ld boot.o kernel.o kernel_asm.o
 
 jethros.iso: check jethros.bin
 	@cp jethros.bin ./isodir/boot/jethr.os
-	@chronic grub-mkrescue -o jethros.iso isodir
+	#@chronic grub-mkrescue -o jethros.iso isodir
+	@grub-mkimage -o jethros.img multiboot sh fat

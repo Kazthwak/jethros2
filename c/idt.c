@@ -39,7 +39,7 @@ void install_idt(){
 	idtr.len = (8*idt_len)-1;
 	idtr.base = (uint32_t)&idt_table;
 
-	set_idt_entry(0, (uint32_t)isr0, 0x08, 0x8e);
+	set_idt_entry(0, (uint32_t)isr0, 0x08, 0xee);
 	set_idt_entry(1, (uint32_t)isr1, 0x08, 0x8e);
 	set_idt_entry(2, (uint32_t)isr2, 0x08, 0x8e);
 	set_idt_entry(3, (uint32_t)isr3, 0x08, 0x8e);
@@ -89,7 +89,9 @@ void install_idt(){
 	set_idt_entry(45, (uint32_t)irq13, 0x08, 0x8e);
 	set_idt_entry(46, (uint32_t)irq14, 0x08, 0x8e);
 	set_idt_entry(47, (uint32_t)irq15, 0x08, 0x8e);
-	set_idt_entry(48, (uint32_t)irq16, 0x08, 0x8e);
+
+	//software interrupts
+	set_idt_entry(48, (uint32_t)irq16, 0x08, 0xee);
 
 
 

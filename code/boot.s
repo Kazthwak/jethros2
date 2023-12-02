@@ -55,6 +55,7 @@ undefined behavior.
 */
 .section .bss
 .align 16
+.global stack_top
 stack_bottom:
 .skip 32768 # 32 KiB
 stack_top:

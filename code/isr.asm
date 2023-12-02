@@ -38,15 +38,15 @@ glob 31
 %macro isrnoerrc 1
 isr%1:
 	cli
-	push byte 0
-	push byte %1
+	push dword 0
+	push dword %1
 	jmp isr_common_stub
 %endmacro
 
 %macro isriserrc 1
 isr%1:
 	cli
-	push byte %1
+	push dword %1
 	jmp isr_common_stub
 %endmacro
 
@@ -110,7 +110,6 @@ isr_common_stub:
     pop ds
     popa
     add esp, 8     ; Cleans up the pushed error code and pushed ISR number
-    sti
 	iret           ; pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP!
 
 
@@ -167,5 +166,7 @@ irq_common_stub:
     pop ds
     popa
     add esp, 8
-	sti
+	push "STAK" ;appears as 5354414b
+	cli
+	hlt
     iret

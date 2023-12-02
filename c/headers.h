@@ -103,7 +103,11 @@ struct regs
     uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;  /* pushed by 'pusha' */
     uint32_t int_no, err_code;    /* our 'push byte #' and ecodes do this */
     uint32_t eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */ 
-};
+}__attribute__((packed));
+
+struct disk_sector{
+	uint8_t data[512];
+}__attribute__((packed));
 
 uint16_t fired = 0;
 char keypressed[128];

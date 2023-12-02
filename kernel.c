@@ -16,7 +16,8 @@
 void kernel_main(){
 string_serial("booted\n");
 init();
-intt0();
+string_serial("\n");
+
 hang();
 Qshutdown();
 }

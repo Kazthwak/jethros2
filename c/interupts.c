@@ -88,6 +88,10 @@ __asm__("cli; hlt;");
 }
 
 void fault_handler(struct regs* r){
+text_serial();
+hexdword(r->int_no);
+byteout(0x3f8, '\n');
+bindword(r->err_code);
 for(uint8_t i = 0; i < 16; i++){
 for(uint8_t j = 0; j < 16; j++){
 putpixel(i+16,j,0x00ff00);

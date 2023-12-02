@@ -19,7 +19,7 @@ ret
 
 global inton
 inton:
-	cli
+	; sti
 	ret
 
 extern Qshutdown
@@ -42,10 +42,7 @@ idtr_load:
 
 global intt0
 intt0:
-	; int 48
-	; ret
-	; jmp test_program
-	call Qshutdown
+	ret
 
 global gdt_load
 gdt_load:
@@ -113,7 +110,11 @@ global test_program_end
 global test_program
 test_program:
 int 48
+int 0
 jmp $
+mov ax, 0
+mov dx, 0
+div dl ;int 0
 test_program_end:
 
 %include "./code/isr.asm"
@@ -124,7 +125,8 @@ eax_boot:
 db "aaa",0
 ebx_boot:
 db "aaa",0
-
+user_stack:
+times(1024) db 0
 
 ;read only data
 SECTION .RODATA

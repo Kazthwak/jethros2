@@ -147,12 +147,12 @@ void gdt_init(){
 	//MUST BE DONE AFTER INSTALLING GDT *facepalm emoticon*
 	flush_tss();
 }
-
+extern void* stack_top;
 void tss_init(){
 	memset((uint32_t)&tss, 0, sizeof(tss));
 	//set up tss gdt segment
 	gdt_set_entry(5, (uint32_t)&tss, sizeof(tss), 0x89, 0x0);
 	tss.ss0 = 0x10;
 	tss.iomap = sizeof(tss);
-	tss.esp0 = 32768;
+	tss.esp0 = 32768;//stack_top-1;
 }

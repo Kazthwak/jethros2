@@ -9,10 +9,10 @@ void wait_sec(uint16_t secs){
 }
 
 void timer_phase(int hz){
-    int divisor = 1193180 / hz;       /* Calculate our divisor */
-    byteout(0x43, 0x36);             /* Set our command byte 0x36 */
-    byteout(0x40, divisor & 0xFF);   /* Set low byte of divisor */
-    byteout(0x40, divisor >> 8);     /* Set high byte of divisor */
+    uint32_t divisor = 1193180 / hz;
+    byteout(0x43, 0x36);
+    byteout(0x40, divisor & 0xFF);
+    byteout(0x40, divisor >> 8);
 }
 
 void timer_handle(struct regs* r){
