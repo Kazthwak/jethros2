@@ -41,7 +41,9 @@ void pic_remap(){
 void irq_handler(struct regs *r){
 	// This is a blank function pointer
 	void (*handler)(struct regs *r);
-
+	text_serial();
+	// print_string("IRQ 0x");
+	// hexdword(r->int_no);
 	// Find out if we have a custom handler to run for this
 	//  IRQ, and then finally, run it
 	handler = irqs[r->int_no - 32];
@@ -63,6 +65,7 @@ void irq_handler(struct regs *r){
 	// interrupt controller too
 	byteout(0x20, 0x20);
 	}
+text_screen();	
 }
 		
 void irq_init(){
@@ -70,9 +73,9 @@ memset((uint32_t)&keypressed, 0, sizeof(keypressed));
 memset((uint32_t)&irqs, 0, sizeof(irqs));
 pic_remap();
 for(uint8_t i = 0; i <16; i++){IRQ_clear_mask(i);}
-IRQ_set_mask(1);
-IRQ_set_mask(0);
 timer_phase(timer_hz);
+// IRQ_set_mask(1);
+// IRQ_set_mask(0);
 install_irq_handle(1, keyboard_int);
 install_irq_handle(0, timer_handle);
 install_irq_handle(16, test_func);
@@ -89,13 +92,10 @@ __asm__("cli; hlt;");
 
 void fault_handler(struct regs* r){
 text_serial();
+print_string("EXCEPTION NO 0x");
 hexdword(r->int_no);
 byteout(0x3f8, '\n');
 bindword(r->err_code);
-for(uint8_t i = 0; i < 16; i++){
-for(uint8_t j = 0; j < 16; j++){
-putpixel(i+16,j,0x00ff00);
-}}
 if(r->int_no == 8){double_fault();}
 hang();
 }

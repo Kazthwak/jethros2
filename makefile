@@ -10,7 +10,7 @@ clean:
 
 run: jethros.iso
 	@rm serial.log -f
-	@qemu-system-x86_64 -drive format=raw,file=jethros.iso -serial file:serial.log -monitor stdio -m 2G
+	@qemu-system-x86_64 -drive format=raw,file=jethros.iso -serial file:serial.log -monitor stdio -m 2G -audiodev pa,id=speaker -machine pcspk-audiodev=speaker
 #comp command ~/opt/cross/bin/i686-elf-gcc -ffreestanding -nostdlib
 
 boot.o: ./code/boot.s
@@ -31,5 +31,6 @@ jethros.bin: ./code/linker.ld boot.o kernel.o kernel_asm.o
 
 jethros.iso: check jethros.bin
 	@cp jethros.bin ./isodir/boot/jethr.os
-	#@chronic grub-mkrescue -o jethros.iso isodir
-	@grub-mkimage -o jethros.img multiboot sh fat
+	@#chronic grub-mkrescue -o jethros.iso isodir
+	@#grub-mkimage -o jethros.img multiboot sh fat
+	@grub-mkimage -O i386-pc -o jethros.img -p isodir -v

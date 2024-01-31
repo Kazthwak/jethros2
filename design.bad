@@ -1,0 +1,6 @@
+single threadecpu
+ring 0
+monothreded to start with
+running code with paging but only one thing (so interrupts need not change ring)
+then change to userland
+then multithreaded

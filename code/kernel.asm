@@ -13,13 +13,14 @@ kernel_init:
 ;declare that the c kernel exists
 extern kernel_main
 ;call the c kernel
+cli
 call kernel_main
 ;return back to the prievious assembly file
 ret
 
 global inton
 inton:
-	; sti
+	sti
 	ret
 
 extern Qshutdown
@@ -42,6 +43,7 @@ idtr_load:
 
 global intt0
 intt0:
+	int 0
 	ret
 
 global gdt_load

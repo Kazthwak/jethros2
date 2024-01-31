@@ -2,6 +2,7 @@
 #define kernel_header_included
 #define version "pre-beta 0.1"
 #define timer_hz 20
+//59659 is a sensible one
 
 
 #include <stdbool.h>
@@ -109,8 +110,11 @@ struct disk_sector{
 	uint8_t data[512];
 }__attribute__((packed));
 
-uint16_t fired = 0;
-char keypressed[128];
+
+uint16_t buzz_freq = 0;
+volatile uint16_t buzz_elap = 0;
+volatile uint16_t fired = 0;
+volatile char keypressed[128];
 //0 = screen
 //1 = serial port
 static uint8_t text_out_type = 0;
@@ -118,8 +122,8 @@ static struct vbe_control_info vbe_control_info;
 static struct vbe_mode_info vbe_info;
 static struct MultiBootInfoStruct stateinfo;
 static volatile uint64_t time = 0;
-static uint16_t cursorx = 0;
-static uint16_t cursory = 0;
+static volatile  uint16_t cursorx = 0;
+static volatile uint16_t cursory = 0;
 static uint16_t x_res = 0;
 static uint16_t y_res = 0;
 static uint16_t x_char_res = 0;

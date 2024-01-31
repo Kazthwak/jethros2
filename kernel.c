@@ -17,7 +17,11 @@ void kernel_main(){
 string_serial("booted\n");
 init();
 string_serial("\n");
-
+while(1==1){
+cursorx = 0;
+cursory = 15;
+hexqword(time);
+}
 hang();
 Qshutdown();
 }
