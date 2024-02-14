@@ -1,11 +1,11 @@
 step 1: booting --YAY--/|\--DONE--
 Steps 2:
 	Graphics (not vga text mode) ---YAY---/|\--DONE--
-	gdt setup
-	idt setup
+	gdt setup ---YAY---/|\--DONE--
+	idt setup ---YAY---/|\--DONE--
 Steps 3:
 	proper interrupt setup:
-		keyboard setup
+		keyboard setup ---YAY---/|\--DONE--
 	hdd setup
 Steps 4:
 	filesystem setup

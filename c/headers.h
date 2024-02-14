@@ -135,9 +135,10 @@ static uint32_t upper_mem = 0;
 //bit 1: safe keyboard mode	-	switch -s
 //bit 2: ignore non-fatal errors - switch -n
 static uint8_t flags = 0;
-
+static volatile struct disk_sector disk_sector1;
 
 //function prototypes
+void poll_master_hdd();
 void grtest(void);
 void memcpy(void* start, uint32_t length, void* dest);
 void tss_init(void);
@@ -145,7 +146,7 @@ void string_serial(char* string);
 void text_screen(void);
 void text_serial(void);
 void wait_tick(uint32_t ticks);
-void wait_sec(uint16_t ticks);
+void wait_sec(uint16_t secs);
 void hexqword(uint64_t val);
 void timer_phase(int hz);
 void timer_handle(struct regs* r);
