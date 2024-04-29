@@ -10,7 +10,7 @@ clean:
 
 run: jethros.iso
 	@rm serial.log -f
-	@qemu-system-x86_64 -drive format=raw,file=jethros.iso,media=cdrom -serial file:serial.log -monitor stdio -m 2G -drive media=disk,file=hdd.bin,format=raw 
+	@qemu-system-x86_64 -drive format=raw,file=jethros.iso,media=cdrom -serial file:serial.log -m 2G -drive media=disk,file=hdd.bin,format=raw 
 #comp command ~/opt/cross/bin/i686-elf-gcc -ffreestanding -nostdlib
 
 boot.o: ./code/boot.s

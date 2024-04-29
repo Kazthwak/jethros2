@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include "./font.h"
 
+
 //a mask used to check for "errors" when the bootloader does not provide enough information.
 //bits set:
 //vbe info flag bit
@@ -110,10 +111,11 @@ struct disk_sector{
 	uint8_t data[512];
 }__attribute__((packed));
 
-
-uint16_t buzz_freq = 0;
-volatile uint16_t buzz_elap = 0;
-volatile uint16_t fired = 0;
+void port_wiz(void);
+static volatile uint8_t cursoron = 0;
+static uint16_t buzz_freq = 0;
+static volatile uint16_t buzz_elap = 0;
+static volatile uint16_t fired = 0;
 volatile char keypressed[128];
 //0 = screen
 //1 = serial port
@@ -138,6 +140,7 @@ static uint8_t flags = 0;
 static volatile struct disk_sector disk_sector1;
 
 //function prototypes
+uint64_t get_num_in(uint8_t size);
 void poll_master_hdd();
 void grtest(void);
 void memcpy(void* start, uint32_t length, void* dest);
@@ -201,6 +204,7 @@ int bytein(uint32_t port);
 void Qshutdown(void);
 void kernel_main(void);
 
+extern void read_simple(void);
 extern void* test_program;
 extern void* test_program_end;
 extern void flush_tss(void);

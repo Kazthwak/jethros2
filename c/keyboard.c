@@ -1,7 +1,7 @@
 #include "headers.h"
 
-char keybuffer[256];
-uint32_t keybufferloc = (uint32_t)&keybuffer;
+volatile char keybuffer[256];
+volatile uint32_t keybufferloc = (uint32_t)&keybuffer;
 
 bool isshift = false;
 
@@ -102,8 +102,8 @@ bool ispressed(char key){
 return(keypressed[(uint8_t)key]);
 }
 
+//FIXED
 char get_key_buffer(){
-	begining:
 if((uint32_t)&keybuffer == keybufferloc){return(0);}
 uint8_t output = keybuffer[0];
 for(uint8_t i = 0; i < 255; i++){
@@ -112,19 +112,63 @@ for(uint8_t i = 0; i < 255; i++){
 keybufferloc--;
 if(output == 0x2a){
 	isshift = true;
-	goto begining;
+	return(get_key_buffer());
 }
 if(output == 0xaa){
 	isshift = false;
-	goto begining;
+	return(get_key_buffer());
 }
 
 
 
-if(output>>7 == 1){goto begining;}
-return(scancode(output));
+if(output>>7 == 1){get_key_buffer();}
+return(output);
 }
 
 void clear_key_buffer(){
 keybufferloc = (uint32_t)&keybuffer;
+}
+
+
+#define ENTER 0x1C
+
+uint64_t get_num_in(uint8_t size){
+	uint64_t num = 0;
+	bool going = true;
+	uint16_t curd = cursorx;
+	while(going){
+		while(!is_key_waiting()){}
+		uint8_t key = get_key_buffer();
+		if(key == ENTER){going = false; break;}
+		key = scancode(key);
+		if((key >= 0x30 && key <= 0x39) || (key >= 0x61 && key <= 0x66)){
+			//key is valid number
+			num = num<<4;
+			key -= 0x30;
+			if(key > 0x09){
+				key -= (0x30-0x09);
+			}
+			num+= key;
+			cursorx = curd;
+			switch(size){
+				case 8:
+				hexbyte(num);
+				break;
+				case 16:
+				hexword(num);
+				break;
+				case 32:
+				hexdword(num);
+				break;
+				case 64:
+				hexqword(num);
+				break;
+				default:
+				hexqword(num);
+				break;
+			}
+		}
+	}
+num = num%pow(2,size);
+return(num);
 }

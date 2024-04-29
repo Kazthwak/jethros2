@@ -17,7 +17,20 @@ void kernel_main(){
 string_serial("booted\n");
 init();
 string_serial("\n");
-read_sector(&disk_sector1, 0, 0);
+newline();
+/*
+uint16_t curd = cursorx;
+uint16_t cury = cursory;
+while(1){
+	cursorx = curd;
+	uint16_t count = 0;
+	while(!is_key_waiting()){count++; hexword(count); cursorx = curd;}
+	newline();
+	hexbyte(scancode(get_key_buffer()));
+	cursory = cury;
+}
+//*/
+port_wiz();
 hang();
 Qshutdown();
 }

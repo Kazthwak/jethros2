@@ -17,24 +17,11 @@ void timer_phase(int hz){
 
 void timer_handle(struct regs* r){
 	r++;// to shut up the compiler
-	if(buzz_freq !=0){
-		buzz_elap++;
-		if(buzz_elap == buzz_freq){
-			uint8_t tmp = bytein(0x61);
-			text_serial();
-			print_string(" KEY");
-			binbyte(tmp);
-			if((tmp&0b010)>>1){
-				tmp &= 0b11111101;
-			}else{
-				tmp |= 0b010;
-			}
-			print_string(" ");
-			binbyte(tmp);
-			text_screen();
-			byteout(0x61, tmp);
-			buzz_elap = 0;
-		}
-	}
 	time++;
+	if(time%20 == 0 && cursoron == 1){
+		static uint32_t last_cursor;
+		draw_rect(0,0,8,16,last_cursor);
+		if(last_cursor == 0x0){last_cursor = 0xffffff;}
+		else{last_cursor = 0x0;}
+	}
 }

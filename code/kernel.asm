@@ -92,7 +92,7 @@ keyboard_int:
 	mov ebx, keypressed ;ebx has the address
 	and al, 0x7f ;ignore the top bit
 	mov edx, eax ;because one cannot create the sum of multiple values that differ in size
-	and edx, 0xff;get rid of everything except al
+	and edx, 0xff;get rid of everything except al, probably unecassary
 	add ebx, edx ;add them together
 	xor ah, 1 ;reverse ah, so a release turns to a 0 and a press becomes a 1
 	;update the array index
@@ -107,6 +107,9 @@ flush_tss:
 	mov ax, 0x28 | 0 ;gdt entry bit shifted then or'ed with the privelidge level
 	ltr ax
 	ret
+
+
+
 
 global test_program_end
 global test_program

@@ -1,11 +1,12 @@
 Which files are copy pasted
 kernel.c	- two checks for cross compiler are copy-pasted, rest is not
 boot.s		- mostly copy-pasted
-kernel.asm	- not copy-pasted
+kernel.asm	- not copy-paste
 linker.ld	- copy-pasted
 isodir		- copy-pasted
 font.h		- font dowloaded from github. Author - Marcel Sondaar. Public domain
 idt.c + isr.c	- mostly copied but not copy-pasted.
 interupts.c	- copy-pasted, but any actual interupt handlers are mine
+disk.c		- drivers unforgivably copy-pasted, writing my own drivers is high on the priority list.
 the rest are not copy-pasted (barring the odd phrase and from myself)
 bran's kernel development tutorial and the OSdev wiki have provided enourmous help
