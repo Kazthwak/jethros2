@@ -2,6 +2,8 @@
 #define kernel_header_included
 #define version "pre-beta 0.1"
 #define timer_hz 20
+#define ENTER 0x1C
+#define BACKSPACE 0x0E
 //59659 is a sensible one
 
 
@@ -111,9 +113,9 @@ struct disk_sector{
 	uint8_t data[512];
 }__attribute__((packed));
 
-void port_wiz(void);
+static volatile uint64_t testval = 0;
 static volatile uint8_t cursoron = 0;
-static uint16_t buzz_freq = 0;
+volatile uint16_t buzz_freq = 0;
 static volatile uint16_t buzz_elap = 0;
 static volatile uint16_t fired = 0;
 volatile char keypressed[128];
@@ -140,6 +142,11 @@ static uint8_t flags = 0;
 static volatile struct disk_sector disk_sector1;
 
 //function prototypes
+void port_wiz(void);
+void wait_for_enter(void);
+uint64_t trunc_int(uint64_t num, uint8_t size);
+void print_size(uint64_t num, uint8_t size);
+void clear_screen(void);
 uint64_t get_num_in(uint8_t size);
 void poll_master_hdd();
 void grtest(void);
@@ -198,9 +205,9 @@ void putchar(char letter);
 void arbitraryfunc(uint32_t funcaddr);
 void memset(uint32_t base, uint8_t val, uint32_t length);
 void byteout(uint32_t port, uint8_t data);
-int wordin(uint32_t port);
+uint16_t wordin(uint32_t port);
 void wordout(uint32_t port, uint16_t data);
-int bytein(uint32_t port);
+uint8_t bytein(uint16_t port);
 void Qshutdown(void);
 void kernel_main(void);
 

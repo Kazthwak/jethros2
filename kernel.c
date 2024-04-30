@@ -12,25 +12,34 @@
 // #error "Cross compiler required: https://wiki.osdev.org/GCC_Cross-Compiler"
 // #endif
 
+void test(void){
+	byteout(0x1f6, 0XE0);
+	wait_tick(1);
+	byteout(0x1f1, 0x0);
+	wait_tick(1);
+	byteout(0x1f2, 1);
+	wait_tick(1);
+	byteout(0x1f3, 0);
+	wait_tick(1);
+	byteout(0x1f4, 0);
+	wait_tick(1);
+	byteout(0x1f5, 0);
+	wait_tick(1);
+	byteout(0x1f7, 0x20);
+	print_string("ASD");
+	while(1){
+		wait_for_enter();
+		hexword(wordin(0x1f0));
+	}
+}
 
 void kernel_main(){
 string_serial("booted\n");
 init();
 string_serial("\n");
 newline();
-/*
-uint16_t curd = cursorx;
-uint16_t cury = cursory;
-while(1){
-	cursorx = curd;
-	uint16_t count = 0;
-	while(!is_key_waiting()){count++; hexword(count); cursorx = curd;}
-	newline();
-	hexbyte(scancode(get_key_buffer()));
-	cursory = cury;
-}
-//*/
 port_wiz();
+test();
 hang();
 Qshutdown();
 }

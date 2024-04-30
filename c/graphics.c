@@ -10,6 +10,12 @@ static uint32_t screen_address;
 static uint16_t colour_depth;
 //error reporting for non-fatal errors
 
+void clear_screen(){
+	draw_rect(0, 0, x_res, y_res, 0x000000);
+	cursorx = 0;
+	cursory = 0;
+}
+
 void grtest(){
 	memcpy((void*)screen_address, scanlinewidth*(y_res>>1), (void*)screen_address+(scanlinewidth*(y_res>>1)));
 }

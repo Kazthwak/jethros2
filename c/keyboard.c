@@ -130,16 +130,52 @@ keybufferloc = (uint32_t)&keybuffer;
 }
 
 
-#define ENTER 0x1C
+void print_size(uint64_t num, uint8_t size){
+switch(size){
+	case 8:
+	hexbyte(num);
+	break;
+	case 16:
+	hexword(num);
+	break;
+	case 32:
+	hexdword(num);
+	break;
+	case 64:
+	hexqword(num);
+	break;
+	default:
+	hexqword(num);
+	break;
+}
+}
+
+uint64_t trunc_int(uint64_t num, uint8_t size){
+switch(size){
+	case 8:
+	return((uint8_t)num);
+	case 16:
+	return((uint16_t)num);
+	case 32:
+	return((uint32_t)num);
+	case 64:
+	return((uint64_t)num);
+	default:
+	return((uint64_t)num);
+}
+}
 
 uint64_t get_num_in(uint8_t size){
 	uint64_t num = 0;
 	bool going = true;
 	uint16_t curd = cursorx;
 	while(going){
+		cursorx = curd;
+		print_size(num,size);
 		while(!is_key_waiting()){}
 		uint8_t key = get_key_buffer();
 		if(key == ENTER){going = false; break;}
+		if(key == BACKSPACE){num = num >> 4;}
 		key = scancode(key);
 		if((key >= 0x30 && key <= 0x39) || (key >= 0x61 && key <= 0x66)){
 			//key is valid number
@@ -149,26 +185,19 @@ uint64_t get_num_in(uint8_t size){
 				key -= (0x30-0x09);
 			}
 			num+= key;
-			cursorx = curd;
-			switch(size){
-				case 8:
-				hexbyte(num);
-				break;
-				case 16:
-				hexword(num);
-				break;
-				case 32:
-				hexdword(num);
-				break;
-				case 64:
-				hexqword(num);
-				break;
-				default:
-				hexqword(num);
-				break;
-			}
 		}
 	}
-num = num%pow(2,size);
+num = trunc_int(num,size);
+string_serial("returning from getnumin");
 return(num);
+}
+
+void wait_for_enter(){
+while(1){
+	while(!is_key_waiting()){}
+	uint8_t tmp = get_key_buffer();
+	if(tmp == ENTER){
+		return;
+	}
+}
 }

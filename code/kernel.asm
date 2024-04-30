@@ -25,6 +25,7 @@ inton:
 
 extern Qshutdown
 hang:
+cli
 hlt
 jmp hang
 

@@ -9,3 +9,7 @@ Steps 3:
 	hdd setup
 Steps 4:
 	filesystem setup
+	basic program loading
+Steps 5:
+	advanced program loading
+	multithreading

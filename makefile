@@ -10,13 +10,14 @@ clean:
 
 run: jethros.iso
 	@rm serial.log -f
-	@qemu-system-x86_64 -drive format=raw,file=jethros.iso,media=cdrom -serial file:serial.log -m 2G -drive media=disk,file=hdd.bin,format=raw 
+	@qemu-system-x86_64 -drive format=raw,file=jethros.iso,media=disk -serial file:serial.log -m 2G 
+#-drive media=disk,file=hdd.bin,format=raw 
 #comp command ~/opt/cross/bin/i686-elf-gcc -ffreestanding -nostdlib
 
 boot.o: ./code/boot.s
 	@~/opt/cross/bin/i686-elf-as ./code/boot.s -o boot.o
 
-kernel.o: kernel.c headers.h ./c/drivers.c ./c/files.h ./c/gdt.c ./c/headers.h ./c/idt.c ./c/utils.c ./c/graphics.c ./c/interupts.c ./c/keyboard.c ./c/disk.c ./c/timer.c
+kernel.o: kernel.c headers.h ./c/drivers.c ./c/files.h ./c/gdt.c ./c/headers.h ./c/idt.c ./c/utils.c ./c/graphics.c ./c/interupts.c ./c/keyboard.c ./c/disk.c ./c/timer.c ./c/debug.c
 	@~/opt/cross/bin/i686-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
 kernel_asm.o: ./code/kernel.asm ./code/isr.asm
