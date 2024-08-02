@@ -1,5 +1,11 @@
 #include "headers.h"
 
+void timestamp(void){
+	print_string(" with timestamp ");
+	hexqword(time);
+}
+
+
 void port_wiz(){
 	testval = 1;
 	clear_screen();
@@ -18,9 +24,25 @@ void port_wiz(){
 			uint32_t port = get_num_in(32);
 			print_string("\nPort Read Value of: ");
 			if(size == 0){
-				hexbyte(bytein(port));
+				uint8_t tmp = bytein(port);
+				hexbyte(tmp);
+				text_serial();
+				print_string("\nRead ");
+				hexbyte(tmp);
+				print_string(" from port ");
+				hexdword(port);
+				timestamp();
+				text_screen();
 			}else{
-				hexword(wordin(port));
+				uint16_t tmp = wordin(port);
+				hexword(tmp);
+				text_serial();
+				print_string("\nRead ");
+				hexword(tmp);
+				print_string(" port ");
+				hexdword(port);
+				timestamp();
+				text_screen();
 			}
 			clear_key_buffer();
 			wait_for_enter();
@@ -34,8 +56,22 @@ void port_wiz(){
 			uint16_t value = get_num_in(16);
 			if(size == 0){
 				byteout(port, value);
+				text_serial();
+				print_string("\nWrote ");
+				hexbyte(value);
+				print_string(" to port ");
+				hexdword(port);
+				timestamp();
+				text_screen();
 			}else{
 				wordout(port, value);
+				text_serial();
+				print_string("\nWrote ");
+				hexword(value);
+				print_string(" to port ");
+				hexdword(port);
+				timestamp();
+				text_screen();
 			}
 		}
 		clear_screen();

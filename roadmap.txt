@@ -4,10 +4,12 @@ Steps 2:
 	gdt setup ---YAY---/|\--DONE--
 	idt setup ---YAY---/|\--DONE--
 Steps 3:
-	proper interrupt setup:
-		keyboard setup ---YAY---/|\--DONE--
+	proper interrupt setup: ---YAY---/|\--DONE--
+	keyboard setup ---YAY---/|\--DONE--
+	wizzy keyboard shortcut (I love assembly)
 	hdd setup
 Steps 4:
+	simple debugging tools
 	filesystem setup
 	basic program loading
 Steps 5:

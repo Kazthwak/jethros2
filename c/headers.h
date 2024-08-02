@@ -1,10 +1,10 @@
 #ifndef kernel_header_included
 #define kernel_header_included
-#define version "pre-beta 0.1"
+#define version "pre-alpha 0.2"
 #define timer_hz 20
 #define ENTER 0x1C
 #define BACKSPACE 0x0E
-//59659 is a sensible one
+//59659 is a sensible frequency
 
 
 #include <stdbool.h>
@@ -139,17 +139,17 @@ static uint32_t upper_mem = 0;
 //bit 1: safe keyboard mode	-	switch -s
 //bit 2: ignore non-fatal errors - switch -n
 static uint8_t flags = 0;
-static volatile struct disk_sector disk_sector1;
 
 //function prototypes
+
+bool disk_poll(void);
+bool disk_read(volatile struct disk_sector* sector_address, uint32_t LBA);
 void port_wiz(void);
 void wait_for_enter(void);
 uint64_t trunc_int(uint64_t num, uint8_t size);
 void print_size(uint64_t num, uint8_t size);
 void clear_screen(void);
 uint64_t get_num_in(uint8_t size);
-void poll_master_hdd();
-void grtest(void);
 void memcpy(void* start, uint32_t length, void* dest);
 void tss_init(void);
 void string_serial(char* string);

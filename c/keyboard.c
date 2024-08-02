@@ -188,7 +188,6 @@ uint64_t get_num_in(uint8_t size){
 		}
 	}
 num = trunc_int(num,size);
-string_serial("returning from getnumin");
 return(num);
 }
 

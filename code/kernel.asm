@@ -59,7 +59,6 @@ gdt_load:
 	mov ss, ax
 	ret
 
-
 extern keybuffer
 extern keybufferloc
 extern keypressed

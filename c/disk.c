@@ -1,60 +1,58 @@
 #include "headers.h"
 
-// uint8_t
+#define master_drive 0xE0
 
-void disk_init(uint8_t disk_num){
-disk_num++;
+
+bool disk_poll(void){
+	
+	//400ns delay
+	for(volatile uint8_t i = 0; i < 14; i++){
+		bytein(0x1f7);
+	}
+	
+	while(1){
+	uint8_t status = bytein(0x1f7);
+	uint8_t BSY, DRQ, ERR, DF;
+	BSY = (status&0b10000000)>>7;
+	DRQ = (status&0b00001000)>>3;
+	ERR = (status&0b00000001)>>0;
+	 DF = (status&0b00100000)>>5;
+	if(ERR == 1 || DF == 1){
+		//AN ERROR HAS OCCURRED
+		return(false);
+	}
+	if(BSY == 0 && DRQ == 1){
+		//ready to progress
+		return(true);
+	}
+	}
 }
 
-void poll_master_hdd(){
-	wait_sec(2);
+bool disk_read(volatile struct disk_sector* sector_address, uint32_t LBA){
+//starting disk read
+//select the master drive
+byteout(0x1f6, 0xE0 | ((LBA >> 24) & 0x0F));
+//requenst 1 sector
+byteout(0x1f2, 1);
+//send the sector address
+byteout(0x1f3, LBA&0xff);
+byteout(0x1f4, (LBA>>8)&0xff);
+byteout(0x1f5, (LBA>>16)&0xff);
+
+//send the read command
+byteout(0x1f7, 0x20);
+
+//poll for ready
+if(!disk_poll()){return(false);}
+
+clear_screen();
+for(uint16_t i = 0; i<256; i++){
+	uint16_t val = wordin(0x1f0);
+	sector_address->data[i*2] = val&0xff;
+	sector_address->data[i*2+1]=val>>0x8;
+	val = ((val&0xff)<<8) | (val>>8);
+	hexword(val);
+	putchar(' ');
 }
-
-uint8_t ata_data[512];
-
-//curent driver only accepts 1 sector reads
-uint8_t read_sector(volatile struct disk_sector* memloc, uint32_t sector_address, uint8_t disknum){
-uint16_t curb;
-/*
-//reset drive first
-byteout(0x3f6, 4);
-curb = cursorx;
-while(!is_key_waiting()){cursorx = curb; binbyte(bytein(0x1f7));wait_tick(1);}newline();get_key_buffer();
-byteout(0x3f6, 0);
-wait_sec(1);
-bytein(0x1f1);
-for(uint16_t i = 0; i < 256; i++){
-	ata_data[i] = wordin(0x1f0);
-}
-print_string("Drive rest");
-
-
-curb = cursorx;
-while(!is_key_waiting()){cursorx = curb; binbyte(bytein(0x1f7));wait_tick(1);}newline();get_key_buffer();
-*/
-byteout(0x1f6, 0xE0 | 0);//select master drive
-byteout(0x1f1, 0x0);//null byte
-byteout(0x1f2, 0x1);//sector count
-byteout(0x1f3, 0x1);//low byte
-byteout(0x1f4, 0x0);
-byteout(0x1f5, 0x0);
-byteout(0x1f7,0x20);//read_sectors
-
-curb = cursorx;
-while(!is_key_waiting()){cursorx = curb; binbyte(bytein(0x1f7));wait_tick(1);}newline();get_key_buffer();
-print_string("reading (fingers crossed)");
-hexword(wordin(0x1f0));
-newline();
-binbyte(bytein(0x1f7));
-newline();
-binbyte(bytein(0x1f1));
-hang();
-}
-
-uint8_t write_sector( volatile struct disk_sector* memloc, uint32_t sector_address, uint8_t disknum){
-//todo, implement
-memloc++;
-sector_address++;
-disknum++;
-return(1);
+return(true);
 }

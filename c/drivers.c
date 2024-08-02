@@ -26,19 +26,19 @@ uint8_t bytein(uint16_t port){
 void byteout(uint32_t port, uint8_t data){
 // " a " ( data ) means : load EAX with data
 // " d " ( port ) means : load EDX with port
-__asm__("out %% al, %% dx" : : "a" (data), "d" ((unsigned short)port));
+asm volatile("out %% al, %% dx" : : "a" (data), "d" ((unsigned short)port));
 }
 
 // takes a word from port
 uint16_t wordin(uint32_t port){
 unsigned short result;
-__asm__("in %% dx , %% ax" : "=a" (result) : "d" ((unsigned short)port));
+asm volatile("in %% dx , %% ax" : "=a" (result) : "d" ((unsigned short)port));
 return result;
 }
 
 //gives a word to port
 void wordout(uint32_t port, uint16_t data){
-__asm__("out %% ax , %% dx" : : "a" (data), "d" ((unsigned short)port));
+asm volatile("out %% ax , %% dx" : : "a" (data), "d" ((unsigned short)port));
 }
 
 //for looking at ram instead of text output (mainly for graphics debugging)
