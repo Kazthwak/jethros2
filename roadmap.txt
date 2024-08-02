@@ -7,7 +7,7 @@ Steps 3:
 	proper interrupt setup: ---YAY---/|\--DONE--
 	keyboard setup ---YAY---/|\--DONE--
 	wizzy keyboard shortcut (I love assembly)
-	hdd setup
+	hdd setup ---YAY---/|\--DONE--
 Steps 4:
 	simple debugging tools
 	filesystem setup
