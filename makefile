@@ -8,11 +8,14 @@ clean:
 	@rm kernel.o
 	@rm kernel_asm.o
 
-run: jethros.iso
+run: jethros.iso program.tar
 	@rm serial.log -f
-	@qemu-system-x86_64 -drive format=raw,file=jethros.iso,media=disk -serial file:serial.log -m 2G 
+	@qemu-system-x86_64 -drive format=raw,file=jethros.iso,media=disk -drive media=disk,file=program.tar,format=raw -serial file:serial.log -m 2G 
 #-drive media=disk,file=hdd.bin,format=raw 
 #comp command ~/opt/cross/bin/i686-elf-gcc -ffreestanding -nostdlib
+
+program.tar: tardir
+	@tar -cf program.tar tardir
 
 boot.o: ./code/boot.s
 	@~/opt/cross/bin/i686-elf-as ./code/boot.s -o boot.o

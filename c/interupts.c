@@ -97,7 +97,9 @@ hexdword(r->int_no);
 byteout(0x3f8, '\n');
 bindword(r->err_code);
 if(r->int_no == 8){double_fault();}
-hang();
+text_screen();
+print_string("asd");
+wait_for_enter();
 }
 
 void IRQ_set_mask(unsigned char IRQline){

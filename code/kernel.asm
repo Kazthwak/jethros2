@@ -122,6 +122,13 @@ mov dx, 0
 div dl ;int 0
 test_program_end:
 
+global test
+test:
+pusha
+int 0
+popa
+ret
+
 %include "./code/isr.asm"
 
 ;initialized read-write data-

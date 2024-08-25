@@ -113,6 +113,8 @@ struct disk_sector{
 	uint8_t data[512];
 }__attribute__((packed));
 
+
+
 static volatile uint64_t testval = 0;
 static volatile uint8_t cursoron = 0;
 volatile uint16_t buzz_freq = 0;
@@ -142,6 +144,8 @@ static uint8_t flags = 0;
 
 //function prototypes
 
+void print_string_len(char* str, uint16_t len);
+int64_t find_file_by_name(char* name);
 bool disk_poll(void);
 bool disk_read(volatile struct disk_sector* sector_address, uint32_t LBA);
 void port_wiz(void);
@@ -177,7 +181,7 @@ void install_irq_handle(uint8_t irq_num, void(*handler)(struct regs* r));
 void irq_handler(struct regs* r);
 void double_fault(void);
 void set_idt_entry(uint8_t entry, uint32_t addr, uint16_t gdt_selector, uint8_t flags);
-void fault_handeler(struct regs* r);
+void fault_handler(struct regs* r);
 void install_idt(void);
 void set_idt_entry(uint8_t entry, uint32_t addr, uint16_t gdt_slector, uint8_t flags);
 void draw_rect(uint16_t x, uint16_t y, uint16_t x_size, uint16_t y_res, uint32_t colour);
@@ -211,6 +215,7 @@ uint8_t bytein(uint16_t port);
 void Qshutdown(void);
 void kernel_main(void);
 
+extern void test(void);
 extern void read_simple(void);
 extern void* test_program;
 extern void* test_program_end;

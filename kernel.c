@@ -15,6 +15,7 @@
 
 static volatile struct disk_sector disk_sector1;
 
+
 void kernel_main(){
 string_serial("booted\n");
 init();
@@ -25,8 +26,10 @@ uint16_t curd = cursorx;
 hexqword(time);
 cursorx = curd;
 }
-disk_read(&disk_sector1, 1);
-wait_for_enter();
+clear_screen();
+disk_read(&disk_sector1, 0);
+parse_tarhead(&disk_sector1);
+hang();
 port_wiz();
 hang();
 Qshutdown();
