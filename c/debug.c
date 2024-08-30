@@ -81,3 +81,34 @@ void port_wiz(){
 	}
 	print_string("\nGOODBYE\n");
 }
+
+void test_phys_pages(){
+	while(1){
+	clear_screen();
+	print_string("Testing the page mapper. \nWhat address do you wish to test> : ");
+	uint32_t addr = get_num_in(32);
+	addr = addr/(page_size);
+	print_string("\nPage holds value : ");
+	hexdword(addr);
+	newline();
+	hexbyte((phys_page_state[addr/32]>>(addr%32))&1);
+	wait_for_enter();
+	}
+}
+
+void mem_debug(){
+	while(1){
+		print_string("Memory address to dump : ");
+		uint32_t addr = get_num_in(32);
+		clear_screen();
+		print_string("Dumping 256 bytes from ");
+		hexdword(addr);
+		for(uint16_t y = 0; y < 256; y++){
+			hexbyte(*(uint8_t*)(addr+y));
+			print_string(" ");
+			if(y%32 == 0){newline();}
+		}
+		wait_for_enter();
+		clear_screen();
+	}
+}

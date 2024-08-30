@@ -1,5 +1,24 @@
 #include "headers.h"
 
+bool text_match(char* str0, char* str1, uint8_t mode){
+for(uint8_t i = 0; i < mode; i++){
+	if(str0[i] != str1[i]){return(false);}
+	if(str0[i] == 0){return(true);}
+}
+return(true);
+}
+
+uint32_t octal_get(unsigned char *str, int size){
+    int n = 0;
+    unsigned char *c = str;
+    while (size-- > 0) {
+        n *= 8;
+        n += *c - '0';
+        c++;
+    }
+    return n;
+}
+
 void text_serial(){
 text_out_type = 1;
 }
@@ -29,17 +48,20 @@ struct vbe_control_info* cinfo = (struct vbe_control_info*)stateinfo.vbe_control
 vbe_control_info = *cinfo;
 
 
-//initialize the graphics
-string_serial("initing graphics\n");
-graphics_init();
-
-//install and initialize the idt
+//install and initialise the idt
 string_serial("initing idt\n");
 install_idt();
 
-//install and initialize the irq handlers
+//install and initialise the irq handlers
 string_serial("initing irqs\n");
 irq_init();
+
+//initialise some mem things. also fixes graphics from the bug it creates.
+mem_init();
+
+//initialise the graphics
+string_serial("initing graphics\n");
+graphics_init();
 
 //check some things about the machine
 string_serial("checking machine\n");
@@ -132,7 +154,7 @@ if(stateinfo.mem_lower == 640){
 	print_string(" KB");
 	if(stateinfo.mem_upper != 0){
 		print_string("\nAvailable upper mem: 0x");
-		hexword(stateinfo.mem_upper);
+		hexdword(stateinfo.mem_upper);
 		print_string(" KB");
 	}
 text_serial();

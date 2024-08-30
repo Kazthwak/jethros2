@@ -8,4 +8,9 @@
 #include "./keyboard.c"
 #include "./disk.c"
 #include "./timer.c"
+#include "./mem.c"
+
+
+
+
 #include "./debug.c"

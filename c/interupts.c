@@ -96,10 +96,12 @@ print_string("EXCEPTION NO 0x");
 hexdword(r->int_no);
 byteout(0x3f8, '\n');
 bindword(r->err_code);
+uint32_t addr;
+asm volatile("mov %%cr2 , %%eax" : "=eax" (addr) :);
+byteout(0x3f8, '\n');
+hexdword(addr);
 if(r->int_no == 8){double_fault();}
-text_screen();
-print_string("asd");
-wait_for_enter();
+hang();
 }
 
 void IRQ_set_mask(unsigned char IRQline){

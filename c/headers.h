@@ -1,6 +1,6 @@
 #ifndef kernel_header_included
 #define kernel_header_included
-#define version "pre-alpha 0.2"
+#define version "alpha 0.3"
 #define timer_hz 20
 #define ENTER 0x1C
 #define BACKSPACE 0x0E
@@ -114,7 +114,9 @@ struct disk_sector{
 }__attribute__((packed));
 
 
-
+static uint32_t first_mem_hole;
+static void* end_of_used_ram;
+static void* beg_of_used_ram;
 static volatile uint64_t testval = 0;
 static volatile uint8_t cursoron = 0;
 volatile uint16_t buzz_freq = 0;
@@ -144,6 +146,20 @@ static uint8_t flags = 0;
 
 //function prototypes
 
+uint32_t page_dir_align(uint32_t mem_addr);
+//ADDRESS ***MUST*** BE 4MB ALIGNED OR IT WILL DO JANKY THINGS
+void install_identity_page(uint32_t mem_address);
+void mem_debug(void);
+void page_directory_init(void);
+void mem_init(void);
+void* alloc_phys_page(void);
+void test_phys_pages(void);
+uint8_t init_page_valid(uint32_t mem_addr);
+void init_phys_pages(void);
+//janky. mode is length to check before auto returning true. if a null term is encountered in both before mode,
+//returns true. strings must match at least mode bytes (or both have an nt) to be considered the same
+//0xff is the closest mode to "match to null term"
+bool text_match(char* str1, char* str2, uint8_t mode);
 void print_string_len(char* str, uint16_t len);
 int64_t find_file_by_name(char* name);
 bool disk_poll(void);
@@ -215,6 +231,8 @@ uint8_t bytein(uint16_t port);
 void Qshutdown(void);
 void kernel_main(void);
 
+extern void enable_paging(void);
+extern void load_page_directory(void* pageDirectory);
 extern void test(void);
 extern void read_simple(void);
 extern void* test_program;
@@ -282,5 +300,7 @@ extern void irq14(void);
 extern void irq15(void);
 extern void irq16(void);
 
+extern void* _end_of_bss;
+extern void* _beg_of_mbh;
 
 #endif

@@ -65,8 +65,34 @@ return(true);
 
 #define TAR_length_offset 124
 #define TAR_type_offset 156
+#define TAR_name_offset 0
+#define TAR_identifier_offset 257
+#define TAR_identifier "ustar "
 
 //returns an index to the header of the file, or -1 if no file
 int64_t find_file_by_name(char* name){
-
+uint32_t addr = 0;
+struct disk_sector buffer;
+while(1){
+	disk_read(&buffer, addr);
+	//check valid
+	bool valid = text_match(((void*)&buffer)+TAR_identifier_offset, TAR_identifier, 6);
+	if(!valid){
+		print_string("Non-ustar encountered. failiure condition. This probably means the file was not found\n");
+		return(-1);
+	}
+	//check for match, returning addr if a match
+	bool iscorrectfile = text_match(((void*)&buffer)+TAR_name_offset, name, 100);
+	if(iscorrectfile){
+		print_string("Name match found. success!\n");
+		return(addr);
+	}
+	//increment addr by length
+	uint32_t length = octal_get(((void*)&buffer)+TAR_length_offset, 11);
+	uint32_t sectorlen = (length>>9) + (1) + ((0x1ff&length)>0);
+	addr += sectorlen;
+	print_string("Wrong file found. Adding to addr: ");
+	hexdword(sectorlen);
+	newline();
+}
 }

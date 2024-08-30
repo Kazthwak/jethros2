@@ -26,11 +26,19 @@ uint16_t curd = cursorx;
 hexqword(time);
 cursorx = curd;
 }
-clear_screen();
-disk_read(&disk_sector1, 0);
-parse_tarhead(&disk_sector1);
+text_serial();
+hexdword(vbe_info.phys_addr);
 hang();
-port_wiz();
+mem_debug();
+hexdword((uint32_t)page_directory);
+newline();
+hexdword((uint32_t)page_tables[0]);
+newline();
+hexdword(((uint32_t*)page_tables[1])[0]);
+// newline();
+// hexdword(phys_page_state[(num_pages/32)-1]);
+// hang();
+// test_phys_pages();
 hang();
 Qshutdown();
 }
