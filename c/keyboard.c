@@ -121,7 +121,7 @@ if(output == 0xaa){
 
 
 
-if(output>>7 == 1){get_key_buffer();}
+if(output>>7 == 1){return(get_key_buffer());}
 return(output);
 }
 
@@ -129,6 +129,15 @@ void clear_key_buffer(){
 keybufferloc = (uint32_t)&keybuffer;
 }
 
+char get_raw_buffer(){
+if(keybufferloc == (uint32_t)&keybuffer){return(0);}
+char out = keybuffer[0];
+for(uint8_t i = 0; i < 0xff; i++){
+	keybuffer[i] = keybuffer[i+1];
+}
+keybufferloc--;
+return(out);
+}
 
 void print_size(uint64_t num, uint8_t size){
 switch(size){

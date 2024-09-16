@@ -41,6 +41,8 @@ idtr_load:
 	lidt[idtr]
 	ret
 
+string:
+db "Testing the routine", 0x0a ,0x00
 
 global intt0
 intt0:
@@ -135,12 +137,37 @@ flush_tss:
 global test_program_end
 global test_program
 test_program:
-int 48
-int 0
-jmp $
-mov ax, 0
-mov dx, 0
-div dl ;int 0
+	pusha
+
+	;clear screen
+	mov eax, 2
+	int 48
+
+	;get character
+	.lop:
+		mov ebx, tmpstr
+		mov eax, 0x11
+		int 48
+		cmp byte [tmpstr], 0x00
+		je test_program.lop
+	
+	;output character
+	mov eax, 0
+	mov ebx, tmpstr
+	int 48
+
+	;newline
+	mov eax, 0x01
+	mov ebx, 1
+	mov ecx, 1
+	int 48
+
+	popa
+	ret
+
+tmpstr:
+db "a", 0
+
 test_program_end:
 
 global test

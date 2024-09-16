@@ -47,9 +47,11 @@ vbe_info = *minfo;
 struct vbe_control_info* cinfo = (struct vbe_control_info*)stateinfo.vbe_control_info;
 vbe_control_info = *cinfo;
 
+string_serial("Bootloader: ");
+string_serial((char*)stateinfo.boot_loader_name);
 
 //install and initialise the idt
-string_serial("initing idt\n");
+string_serial("\niniting idt\n");
 install_idt();
 
 //install and initialise the irq handlers
@@ -57,6 +59,7 @@ string_serial("initing irqs\n");
 irq_init();
 
 //initialise some mem things. also fixes graphics from the bug it creates.
+string_serial("initing mem\n");
 mem_init();
 
 //initialise the graphics
@@ -132,7 +135,7 @@ void info(){
 print_string("Welcome to JETHROS.\n");
 print_string(version);
 print_string("\nBOOTLOADER: ");
-print_string((char*)stateinfo.boot_loader_name);
+print_string("Unavailable due to paging issues. Value is in serial log");
 //video info
 print_string("\nScreen resolution: ");
 decint(x_res);
@@ -157,17 +160,6 @@ if(stateinfo.mem_lower == 640){
 		hexdword(stateinfo.mem_upper);
 		print_string(" KB");
 	}
-text_serial();
-decint(x_res);
-putchar('\n');
-decint(y_res);
-putchar('\n');
-bindword(stateinfo.flags);
-putchar('\n');
-hexword(stateinfo.mem_lower);
-putchar('\n');
-hexword(stateinfo.mem_upper);
-text_screen();
 }
 //more info
 

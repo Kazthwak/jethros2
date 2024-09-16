@@ -9,7 +9,7 @@
 #include "./disk.c"
 #include "./timer.c"
 #include "./mem.c"
-
+#include "./program.c"
 
 
 

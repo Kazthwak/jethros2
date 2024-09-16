@@ -40,6 +40,8 @@ memset(screen_address, 0x00, (x_res*y_res)<<2);
 //memory sttuff
 lower_mem = stateinfo.mem_lower<<10;
 upper_mem = stateinfo.mem_upper<<10;
+cursorx = 0;
+cursory = 0;
 }
 
 //set the pixel at x, y

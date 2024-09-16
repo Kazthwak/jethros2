@@ -12,7 +12,6 @@
 // #error "Cross compiler required: https://wiki.osdev.org/GCC_Cross-Compiler"
 // #endif
 
-
 static volatile struct disk_sector disk_sector1;
 
 
@@ -26,15 +25,12 @@ uint16_t curd = cursorx;
 hexqword(time);
 cursorx = curd;
 }
-text_serial();
-hexdword(vbe_info.phys_addr);
-hang();
-mem_debug();
-hexdword((uint32_t)page_directory);
-newline();
-hexdword((uint32_t)page_tables[0]);
-newline();
-hexdword(((uint32_t*)page_tables[1])[0]);
+test_program();
+while(1){
+	cursorx = 0;
+	hexdword(time);
+}
+// mem_debug();
 // newline();
 // hexdword(phys_page_state[(num_pages/32)-1]);
 // hang();

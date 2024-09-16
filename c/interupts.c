@@ -41,7 +41,6 @@ void pic_remap(){
 void irq_handler(struct regs *r){
 	// This is a blank function pointer
 	void (*handler)(struct regs *r);
-	text_serial();
 	// print_string("IRQ 0x");
 	// hexdword(r->int_no);
 	// Find out if we have a custom handler to run for this
@@ -65,7 +64,6 @@ void irq_handler(struct regs *r){
 	// interrupt controller too
 	byteout(0x20, 0x20);
 	}
-text_screen();	
 }
 		
 void irq_init(){
@@ -79,6 +77,7 @@ timer_phase(timer_hz);
 install_irq_handle(1, keyboard_int);
 install_irq_handle(0, timer_handle);
 install_irq_handle(16, test_func);
+install_irq_handle(16, int48_handle);
 inton();
 }
 

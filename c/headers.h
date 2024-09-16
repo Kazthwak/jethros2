@@ -146,13 +146,17 @@ static uint8_t flags = 0;
 
 //function prototypes
 
+char get_raw_buffer(void);
+void int48_handle(struct regs* r);
+void map_alloc_to_page(uint32_t virt_address);
+void init_nonidentity_page(void);
 uint32_t page_dir_align(uint32_t mem_addr);
 //ADDRESS ***MUST*** BE 4MB ALIGNED OR IT WILL DO JANKY THINGS
 void install_identity_page(uint32_t mem_address);
 void mem_debug(void);
 void page_directory_init(void);
 void mem_init(void);
-void* alloc_phys_page(void);
+void* alloc_phys_page(uint32_t start_addr);
 void test_phys_pages(void);
 uint8_t init_page_valid(uint32_t mem_addr);
 void init_phys_pages(void);
@@ -235,7 +239,7 @@ extern void enable_paging(void);
 extern void load_page_directory(void* pageDirectory);
 extern void test(void);
 extern void read_simple(void);
-extern void* test_program;
+extern void test_program(void);
 extern void* test_program_end;
 extern void flush_tss(void);
 extern void inton(void);
