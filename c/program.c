@@ -80,3 +80,23 @@ void int48_handle(struct regs* r){
 			break;
 	}
 }
+
+void load_program(char* program_name){
+uint32_t LBA_prog_address = find_file_by_name(program_name);
+uint32_t file_length = get_file_length(LBA_prog_address);
+uint32_t num_required_pages  = file_length/(page_size/0x200) + ((file_length&((page_size/0x200)-1)) > 0);
+hexdword(file_length);
+newline();
+hexdword(num_required_pages);
+if(num_required_pages > (ONE_MB/page_size)){
+	print_string("\nTo much Memory Required\n");
+	return;
+}
+for(uint16_t i = 0; i < num_required_pages; i++){
+	map_alloc_to_page(i*page_size);
+}
+//first num_required_pages now allocated
+for(uint32_t i = 0; i < file_length; i++){
+disk_read((volatile struct disk_sector*)(i*512),LBA_prog_address+1+i);
+}
+}

@@ -23,6 +23,7 @@ void mem_init(){
 	//initialise the pointer to the end of used ram
 	end_of_used_ram = &_end_of_bss;
 	beg_of_used_ram = &_beg_of_mbh;
+	zero_address = &_zero_address;
 
 	uint32_t max_mem = stateinfo.mem_upper;
 	max_mem *= 1024; //now contains the size of upper memory in bytes

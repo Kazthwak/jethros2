@@ -69,6 +69,23 @@ return(true);
 #define TAR_identifier_offset 257
 #define TAR_identifier "ustar "
 
+
+#define ILLEGAL_RETURN_VALUE 0xffffffff
+//0xffffffffc is illegal
+uint32_t get_file_length(uint32_t LBA){
+struct disk_sector program_load_temp;
+disk_read(&program_load_temp, LBA);
+	bool valid = text_match(((void*)&program_load_temp)+TAR_identifier_offset, TAR_identifier, 6);
+	if(!valid){
+		print_string("Non-ustar encountered. failiure condition. Being honest, I don't know what caused this\n");
+		return(ILLEGAL_RETURN_VALUE);
+	}
+	uint32_t length = octal_get(((void*)&program_load_temp)+TAR_length_offset, 11);
+	uint32_t sectorlen = (length>>9) + ((0x1ff&length)>0);
+	return(sectorlen);
+}
+
+
 //returns an index to the header of the file, or -1 if no file
 int64_t find_file_by_name(char* name){
 uint32_t addr = 0;

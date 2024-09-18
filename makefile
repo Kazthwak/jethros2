@@ -14,11 +14,11 @@ run: jethros.iso program.tar
 #-drive media=disk,file=hdd.bin,format=raw 
 #comp command ~/opt/cross/bin/i686-elf-gcc -ffreestanding -nostdlib
 
-program.tar: tardir makefile tarrdir/program.exe
+program.tar: tardir makefile tardir/program.exe
 	@tar --transform 's|^\./||' -cf program.tar -C tardir .
 
 tardir/program.exe: tardir/program.asm
-	nasm tardir/program.asm -o tardir/test.exe
+	@nasm tardir/program.asm -o tardir/program.exe
 
 boot.o: ./code/boot.s
 	@~/opt/cross/bin/i686-elf-as ./code/boot.s -o boot.o

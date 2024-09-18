@@ -114,6 +114,7 @@ struct disk_sector{
 }__attribute__((packed));
 
 
+static void* zero_address;
 static uint32_t first_mem_hole;
 static void* end_of_used_ram;
 static void* beg_of_used_ram;
@@ -146,6 +147,8 @@ static uint8_t flags = 0;
 
 //function prototypes
 
+uint32_t get_file_length(uint32_t LBA);
+void load_program(char* program_name);
 char get_raw_buffer(void);
 void int48_handle(struct regs* r);
 void map_alloc_to_page(uint32_t virt_address);
@@ -306,5 +309,6 @@ extern void irq16(void);
 
 extern void* _end_of_bss;
 extern void* _beg_of_mbh;
+extern void* _zero_address;
 
 #endif

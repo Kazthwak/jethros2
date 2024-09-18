@@ -20,17 +20,14 @@ string_serial("booted\n");
 init();
 string_serial("\n");
 newline();
-while(0){
-uint16_t curd = cursorx;
-hexqword(time);
-cursorx = curd;
-}
-test_program();
-while(1){
-	cursorx = 0;
-	hexdword(time);
-}
-// mem_debug();
+
+map_alloc_to_page(0x0);
+
+load_program("program.exe");
+// hang();
+__asm__ volatile("call 0x00");
+
+//mem_debug();
 // newline();
 // hexdword(phys_page_state[(num_pages/32)-1]);
 // hang();
