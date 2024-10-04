@@ -147,6 +147,7 @@ static uint8_t flags = 0;
 
 //function prototypes
 
+void uber_debug(void);
 uint32_t get_file_length(uint32_t LBA);
 void load_program(char* program_name);
 char get_raw_buffer(void);

@@ -30,6 +30,8 @@ eax is mode:
 		set ebx to scancode(ebx)
 	case 0x14:
 		start a 128b (fake) dma loading the keyboard buffer to *ebx
+	case 0xffffffff
+		start the debugger
 */
 
 void int48_handle(struct regs* r){
@@ -78,6 +80,9 @@ void int48_handle(struct regs* r){
 		case 0x13:
 			r->ebx = scancode(r->ebx);
 			break;
+		
+		case 0xffffffff:
+			uber_debug();
 	}
 }
 

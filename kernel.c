@@ -21,7 +21,6 @@ init();
 string_serial("\n");
 newline();
 
-map_alloc_to_page(0x0);
 
 load_program("program.exe");
 // hang();

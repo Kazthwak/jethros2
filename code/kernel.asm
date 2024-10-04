@@ -25,7 +25,7 @@ inton:
 
 extern Qshutdown
 hang:
-cli
+;cli
 hlt
 jmp hang
 
@@ -82,6 +82,7 @@ enable_paging:
 	pop ebp
 	ret
 
+extern uber_debug
 extern keybuffer
 extern keybufferloc
 extern keypressed
@@ -93,6 +94,12 @@ keyboard_int:
 	in al, dx
 	;copy it to ah
 	mov ah, al
+	
+	;open uber debugger in an emergency
+	cmp al, 0x01
+	jne .not_debugger
+	call uber_debug
+	.not_debugger:
 	;shift it to the right 7 times
 	shr ah, 7
 	;check if it is 0

@@ -97,7 +97,6 @@ void test_phys_pages(){
 }
 
 void mem_debug(){
-	while(1){
 		print_string("Memory address to dump : ");
 		uint32_t addr = get_num_in(32);
 		clear_screen();
@@ -110,5 +109,10 @@ void mem_debug(){
 		}
 		wait_for_enter();
 		clear_screen();
-	}
+}
+
+void uber_debug(){
+	clear_screen();
+	print_string("DEBUGGER OPENED\n");
+	string_serial("\nDEBUGGER OPENED\n");
 }
