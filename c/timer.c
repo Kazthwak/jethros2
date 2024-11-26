@@ -16,12 +16,16 @@ void timer_phase(int hz){
 }
 
 void timer_handle(struct regs* r){
-	r++;// to shut up the compiler
 	time++;
-	if(time%20 == 0 && cursoron == 1){
+	if(cursoron == 1 && time%20 == 0){
 		static uint32_t last_cursor;
-		draw_rect(0,0,8,16,last_cursor);
+		draw_rect(8*(cursorx+1),16*cursory,8,16,last_cursor);
 		if(last_cursor == 0x0){last_cursor = 0xffffff;}
 		else{last_cursor = 0x0;}
+	}
+	if(timerflags){
+		if(timerflags&1){
+			r->eip = (uint32_t)uber_debug;
+		}
 	}
 }

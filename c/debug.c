@@ -97,22 +97,60 @@ void test_phys_pages(){
 }
 
 void mem_debug(){
+		clear_screen();
 		print_string("Memory address to dump : ");
 		uint32_t addr = get_num_in(32);
 		clear_screen();
 		print_string("Dumping 256 bytes from ");
 		hexdword(addr);
+		newline();
 		for(uint16_t y = 0; y < 256; y++){
 			hexbyte(*(uint8_t*)(addr+y));
 			print_string(" ");
-			if(y%32 == 0){newline();}
+			if((y+1)%32 == 0){newline();}
 		}
 		wait_for_enter();
 		clear_screen();
 }
 
+//print_string("\n"); hexdword((uint32_t));
+void info_dump(){
+	clear_screen();
+	print_string("Page Table at : "); hexdword((uint32_t)page_directory);
+	print_string("\nGDT at : "); hexdword((uint32_t)gdt);
+	print_string("\nIDT at : "); hexdword((uint32_t)idt_table);	
+	print_string("\nX resolution : "); hexdword((uint32_t)x_res);
+	print_string("\nY resolution : "); hexdword((uint32_t)y_res);
+	
+	wait_for_enter();
+}
+
+//loops indefinitely
 void uber_debug(){
+	//disable the debug flag
+	timerflags &= 0b11111111111111111111111111111110;
 	clear_screen();
 	print_string("DEBUGGER OPENED\n");
 	string_serial("\nDEBUGGER OPENED\n");
+	while(1){
+	print_string("Pick debugging option:\n0: Wizzy\n1: Mem dumper\n2: Info dump\n");
+	print_string("\nSelect option: ");
+	uint8_t option = get_num_in(8);
+	switch(option){
+		case 0:
+			port_wiz();
+			break;
+		case 1:
+			mem_debug();
+			break;
+		case 2:
+			info_dump();
+			break;
+		default:
+			print_string("\nInvalid option slected");
+		}
+		print_string("\nAgain, again");
+		wait_for_enter();
+		clear_screen();
+	}
 }

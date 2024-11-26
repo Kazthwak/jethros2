@@ -32,6 +32,7 @@ eax is mode:
 		start a 128b (fake) dma loading the keyboard buffer to *ebx
 	case 0xffffffff
 		start the debugger
+	case 0xfffffffe
 */
 
 void int48_handle(struct regs* r){
@@ -83,6 +84,13 @@ void int48_handle(struct regs* r){
 		
 		case 0xffffffff:
 			uber_debug();
+			break;
+		case 0xfffffffe:
+			r->eip = (uint32_t)uber_debug;
+			break;
+		default:
+			print_string("Invalid instcode");
+			break;
 	}
 }
 

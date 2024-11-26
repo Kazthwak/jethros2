@@ -103,17 +103,17 @@ struct vbe_mode_info{
 
 struct regs
 {
-    uint32_t gs, fs, es, ds;      /* pushed the segs last */
-    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;  /* pushed by 'pusha' */
-    uint32_t int_no, err_code;    /* our 'push byte #' and ecodes do this */
-    uint32_t eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */ 
+    volatile uint32_t gs, fs, es, ds;      /* pushed the segs last */
+    volatile uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;  /* pushed by 'pusha' */
+    volatile uint32_t int_no, err_code;    /* our 'push byte #' and ecodes do this */
+    volatile uint32_t eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */ 
 }__attribute__((packed));
 
 struct disk_sector{
 	uint8_t data[512];
 }__attribute__((packed));
 
-
+volatile uint32_t timerflags = 0;
 static void* zero_address;
 static uint32_t first_mem_hole;
 static void* end_of_used_ram;
@@ -147,6 +147,7 @@ static uint8_t flags = 0;
 
 //function prototypes
 
+void info_dump(void);
 void uber_debug(void);
 uint32_t get_file_length(uint32_t LBA);
 void load_program(char* program_name);

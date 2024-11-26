@@ -46,7 +46,10 @@ db "Testing the routine", 0x0a ,0x00
 
 global intt0
 intt0:
-	int 0
+	pusha
+	mov eax, 0xfffffffe
+	int 0x30
+	popa
 	ret
 
 global gdt_load
@@ -82,7 +85,7 @@ enable_paging:
 	pop ebp
 	ret
 
-extern uber_debug
+extern timerflags
 extern keybuffer
 extern keybufferloc
 extern keypressed
@@ -98,7 +101,7 @@ keyboard_int:
 	;open uber debugger in an emergency
 	cmp al, 0x01
 	jne .not_debugger
-	call uber_debug
+	mov [timerflags], dword 1
 	.not_debugger:
 	;shift it to the right 7 times
 	shr ah, 7

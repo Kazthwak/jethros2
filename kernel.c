@@ -21,11 +21,10 @@ init();
 string_serial("\n");
 newline();
 
-
 load_program("program.exe");
 // hang();
 __asm__ volatile("call 0x00");
-
+print_string("\n\nTest\n");
 //mem_debug();
 // newline();
 // hexdword(phys_page_state[(num_pages/32)-1]);
